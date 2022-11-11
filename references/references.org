@@ -1,0 +1,28 @@
+* References for algorithms to be used
+
+** General reference on graph
+
+This page contains useful stuff to deal with graphs
+[[https://www.geeksforgeeks.org/graph-data-structure-and-algorithms/][Useful page]]
+
+** General reference on random graph generation
+
+Still to be added.
+
+** General reference on graph matching
+
+This paper provides a general overview of the topic:
+[[https://arxiv.org/pdf/1301.1493.pdf][Link to arxiv]]
+
+** Exact graph matching - Main ones
+- nauty algorithm
+- traces algorithm 
+
+  Both are described [[https://arxiv.org/pdf/1301.1493.pdf][Here]].
+
+  I think we should aim at implementing these two, with the other coming if we have time.
+
+** Exact graph matching - Additional ones
+- Bliss algorithm
+- Saucy algorithm
+- Conauto algorithm
