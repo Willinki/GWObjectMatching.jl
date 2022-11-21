@@ -1,2 +1,1 @@
-# IsoGraph
-Collection of algorithms for graph isomorphism
+# Gromov-Wasserstein-Learning
