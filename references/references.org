@@ -18,7 +18,7 @@ This paper provides a general overview of the topic:
 - nauty algorithm
 - traces algorithm 
 
-  Both are described [[https://arxiv.org/pdf/1301.1493.pdf][Here]].
+  Both are described [[https://arxiv.org/pdf/1301.1493.pdf][Here]],.
 
   I think we should aim at implementing these two, with the other coming if we have time.
 
@@ -26,3 +26,10 @@ This paper provides a general overview of the topic:
 - Bliss algorithm
 - Saucy algorithm
 - Conauto algorithm
+
+** Main papers to use
+[[https://arxiv.org/abs/1901.06003][This is the computational aspect]]
+
+[[http://proceedings.mlr.press/v48/peyre16.pdf][Peyre and theoretical one]]
+
+
