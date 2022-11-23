@@ -1,0 +1,8 @@
+name = "GWObjectMatching"
+uuid = "f79d5fcc-4d2b-4c5c-828d-89a2256c4c0f"
+authors = ["Willinki <d.badalotti@campus.unimib.it>", "alexpinzi <alex.97.pinzi@gmail.com"]
+version = "0.1.0"
+
+[deps]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+Zygote = "e88e6eb3-aa80-5325-afca-941959d7151f"
