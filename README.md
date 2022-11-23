@@ -1,1 +1,0 @@
-# Gromov-Wasserstein-Learning
