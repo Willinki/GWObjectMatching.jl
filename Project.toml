@@ -1,4 +1,4 @@
-name = "GWObjectMatching"
+name = "ObjectMatching"
 uuid = "f79d5fcc-4d2b-4c5c-828d-89a2256c4c0f"
 authors = ["Willinki <d.badalotti@campus.unimib.it>", "alexpinzi <alex.97.pinzi@gmail.com"]
 version = "0.1.0"
