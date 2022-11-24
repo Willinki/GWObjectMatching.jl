@@ -1,8 +1,8 @@
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.8.3"
+julia_version = "1.8.2"
 manifest_format = "2.0"
-project_hash = "fa292ab55043421172b52b3f456e5989d24554a7"
+project_hash = "425398da40eec877951eaee3a47273948bb0a025"
 
 [[deps.AbstractFFTs]]
 deps = ["ChainRulesCore", "LinearAlgebra"]
@@ -121,6 +121,12 @@ deps = ["CommonSubexpressions", "DiffResults", "DiffRules", "LinearAlgebra", "Lo
 git-tree-sha1 = "10fa12fe96e4d76acfa738f4df2126589a67374f"
 uuid = "f6369f11-7733-5829-9624-2563aa707210"
 version = "0.10.33"
+
+[[deps.FromFile]]
+deps = ["Downloads", "Requires"]
+git-tree-sha1 = "5df4ca248bed8c35164d6a7ae006073bbf8289ff"
+uuid = "ff7dd447-1dcb-4ce3-b8ac-22a812192de7"
+version = "0.1.5"
 
 [[deps.GPUArrays]]
 deps = ["Adapt", "GPUArraysCore", "LLVM", "LinearAlgebra", "Printf", "Random", "Reexport", "Serialization", "Statistics"]
