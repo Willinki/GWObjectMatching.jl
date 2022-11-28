@@ -30,9 +30,9 @@ We will call such a couple a *metric measure space*.
 Given a couple of metric measure spaces $(C,\mu)$ and $(C^*,\mu^*)$, the authors define the discrepancy between them using the definition 
 given by F. Memoli in "Gromov–Wasserstein Distances and the Metric Approach to Object Matching":
 
-$$\operatorname{GW}(C,\mu;C^*,\mu^*) = \min_T  \sum_{\operatorname{i,j,k,l}} L(C_\operatorname{ik},C^*_\operatorname{jl})T_\operatorname{ij}T_\operatorname{kl}, $$
+$$\operatorname{GW}(C,\mu;C^*,\mu^*) = \min_{T \in \Gamma(\mu,\mu^*)] \sum_{i,j,k,l} L(C_{ik},C^*_{jl})T_{ij}T_{kl}, $$
 
-where $T \in \Gamma(\mu,\mu^*)$, i.e. $\sum_{j} T_{ij} = \mu_i$ and $\sum_i T_{ij} = \mu^*_j$. 
+where $T \in \Gamma(\mu,\mu^*)$ means that $\sum_{j} T_{ij} = \mu_i$ and $\sum_i T_{ij} = \mu^*_j$. 
 
 The idea of such definition is the following: find a multivariate matching T (also called transport plan,i.e. a function that can 
 assigns more than a value to a single point) between the nodes, in such a way that the weigth \mu and \mu' are preserved by this 
