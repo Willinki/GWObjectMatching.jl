@@ -27,19 +27,21 @@ We will call such a couple a *metric measure space*.
 
 *** Gromov Wasserstein discrepancy
 
-Given a couple of metric measure spaces (C,\mu) and (C',\mu'), the authors define the discrepancy between them using the definition 
-given by F. Memoli in "Gromov–Wasserstein Distances and the Metric Approach to Object Matching".
+Given a couple of metric measure spaces $(C,\mu)$ and $(C^*,\mu^*)$, the authors define the discrepancy between them using the definition 
+given by F. Memoli in "Gromov–Wasserstein Distances and the Metric Approach to Object Matching":
 
-#SCRIVERE LA FORMULA?
+$$\operatorname{GW}(C,\mu;C^*,\mu^*) = \min_{T \in \Gamma(\mu,\mu^*)} \sum_{i,j,k,l} L(C_{ik},C^*_{jl})T_{ij}T_{kl}, $$
+
+where $T \in \Gamma(\mu,\mu^*)$ means that $\sum_{j} T_{ij} = \mu_i$ and $\sum_i T_{ij} = \mu^*_j$. 
 
 The idea of such definition is the following: find a multivariate matching T (also called transport plan,i.e. a function that can 
 assigns more than a value to a single point) between the nodes, in such a way that the weigth \mu and \mu' are preserved by this 
-matching and C_i,j is not "much" different from C_T(i),T(j). 
+matching and $C_{i,j}$ is not "much" different from $C_{T(i),T(j)}$. 
 
-In other words, as all the possible matchings vary, they want to minimize the sum of all L(C_i,j ; C_T(i),T(j)), where L is a fixed
+In other words, as all the possible matchings vary, they want to minimize the sum of all $L(C_i,j ; C_T(i),T(j))$, where L is a fixed
 loss function, usually initialized to be  
-    i) either the common square distance L(x,y) = |x-y|^2
-    ii) or the so called Kullback-Leibler divergence L(x,y) = KL(a|b) = a*log(a/b)-a+b
+    i) either the common square distance $L(x,y) = |x-y|^2$
+    ii) or the so called Kullback-Leibler divergence $L(x,y) = KL(a|b) = a\log(a/b)-a+b$
 
 
 **** Entropic Gromov-Wasserstein discrepancy
@@ -47,23 +49,28 @@ loss function, usually initialized to be
 Computationally, the minimization problem above is not so efficient to solve, thus the authors consider a sligth modification of it,
 adding an *entropic convex*, that must be thought as a regularizing term:
 
-#SCRIVERE LA FORMULA?
+$$\operatorname{GW}_{\varepsilon}(C,\mu;C^*,\mu^*) = \min_{T \in \Gamma(\mu,\mu^*)} \sum_{i,j,k,l} L(C_{ik},C^*_{jl})T_{ij}T_{kl} -
+\varepsilon H(T), $$
+
+where $H(T)=-\sum_{i,j}T_{ij}(\log(T_{ij}-1))$.
+
 
 so that the solution of this problem (and then of the original one) can be evaluated using the projected gradient descent algorithm,
 which in a particular choice of some constants (i.e. epsilon and tau, we will be in this hypothesis) it can be substituted by the 
 Sinkhorn algorithm, which in time is very a efficient algorithm. 
-[Here I'm referring to eqaution (8) and Proposition 2, how many details should we put of it?]
+[Here I'm referring to eqaution (8) and Proposition 2.]
 
 
 *** Gromov-Wasserstein barycenters
 
-Using the entropic Gromov-Wasserstein discrepancy, given a finite collection of metric measure spaces (C_s,\mu_s) and a vector of
-weigths (\lambda_s), the authors define the barycenter problem
+Using the entropic Gromov-Wasserstein discrepancy, given a finite collection of metric measure spaces $(C_s,\mu_s)_{s=1}^S$ and a vector of
+weigths $(\lambda_s)$, the authors define the barycenter problem as
 
-#SCRIVERE LA FORMULA?
+$$\min_{C \in \mathbb{R}^{N \times N}} \sum_{s=1}^S\lambda_s \operatorname{GW}_{\varepsilon}(C,\mu;C_s,\mu_s),$$
 
-and this is the problem on which we are concentrating, writing in Julia the algorithm they proposed using the theory above.
-
+where we are assuming that the weight $\mu$ of the barycenter is fixed in advance.
+This is the problem on which we are concentrating, writing in Julia the algorithm they proposed using the theory above.
+[I'm referring to Algorithm 1.]
 
 
 ** Gromov-Wasserstein Learning for Graph Matching and Node Embedding
