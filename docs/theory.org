@@ -30,7 +30,7 @@ We will call such a couple a *metric measure space*.
 Given a couple of metric measure spaces $(C,\mu)$ and $(C^*,\mu^*)$, the authors define the discrepancy between them using the definition 
 given by F. Memoli in "Gromov–Wasserstein Distances and the Metric Approach to Object Matching":
 
-$$\operatorname{GW}(C,\mu;C^*,\mu^*) = \min_T  \sum_\operatorname{i,j,k,l} L(C_\operatorname{ik},C^*_\operatorname{jl})T_\operatorname{ij}T_\operatorname{kl}, $$
+$$\operatorname{GW}(C,\mu;C^*,\mu^*) = \min_T  \sum_{\operatorname{i,j,k,l}} L(C_\operatorname{ik},C^*_\operatorname{jl})T_\operatorname{ij}T_\operatorname{kl}, $$
 
 where $T \in \Gamma(\mu,\mu^*)$, i.e. $\sum_{j} T_{ij} = \mu_i$ and $\sum_i T_{ij} = \mu^*_j$. 
 
