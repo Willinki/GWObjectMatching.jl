@@ -49,8 +49,10 @@ loss function, usually initialized to be
 Computationally, the minimization problem above is not so efficient to solve, thus the authors consider a sligth modification of it,
 adding an *entropic convex*, that must be thought as a regularizing term:
 
-$$\operatorname{GW}_{\varepsilon}(C,\mu;C^*,\mu^*) = \min_{T \in \Gamma(\mu,\mu^*)} \sum_{i,j,k,l} L(C_{ik},C^*_{jl})T_{ij}T_{kl} -
-\varepsilon H(T), $$
+\begin{equation}
+\operatorname{GW}_{\varepsilon}(C,\mu;C^*,\mu^*) = \min_{T \in \Gamma(\mu,\mu^*)} \sum_{i,j,k,l} L(C_{ik},C^*_{jl})T_{ij}T_{kl} -
+\varepsilon H(T), 
+\end{equation}
 
 where $H(T)=-\sum_{i,j}T_{ij}(\log(T_{ij}-1))$.
 
@@ -66,7 +68,9 @@ Sinkhorn algorithm, which in time is very a efficient algorithm.
 Using the entropic Gromov-Wasserstein discrepancy, given a finite collection of metric measure spaces $(C_s,\mu_s)_{s=1}^S$ and a vector of
 weigths $(\lambda_s)$, the authors define the barycenter problem as
 
-$$\min_{C \in \mathbb{R}^{N \times N}} \sum_{s=1}^S\lambda_s \operatorname{GW}_{\varepsilon}(C,\mu;C_s,\mu_s),$$
+\begin{equation}
+\min_{C \in \mathbb{R}^{N \times N}} \sum_{s=1}^S\lambda_s \operatorname{GW}_{\varepsilon}(C,\mu;C_s,\mu_s),
+\end{equation}
 
 where we are assuming that the weight $\mu$ of the barycenter is fixed in advance.
 This is the problem on which we are concentrating, writing in Julia the algorithm they proposed using the theory above.
