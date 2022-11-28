@@ -1,5 +1,3 @@
 module ObjectMatching
-
-greet() = print("Hello World!")
-
+include("MetricMeasureSpaces.jl")
 end # module ObjectMatching
