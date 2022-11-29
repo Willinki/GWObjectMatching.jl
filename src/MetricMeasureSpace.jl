@@ -38,7 +38,7 @@ struct MetricMeasureSpace
         if typeof(μ) != Vector{Float64}
             μ = convert(Vector{Float64}, μ)
         end
-        if typeof(C) != Matrix{Float64}
+        if typeof(μ) != Matrix{Float64}
             C = convert(Matrix{Float64}, C)
         end
 
@@ -46,6 +46,16 @@ struct MetricMeasureSpace
             μ = (1/sum(μ))*μ
             @info "We're changing mu in such a way it has sum 1."
         end
+
         return new(C,μ)
     end
 end #struct
+
+
+function MetricMeasureSpace(k::Function, v::Vector)  
+    if v isa Vector{Any}
+        @warn "Vector is of type Vector{Any}."
+    end
+    C = [k(x,y) for x in v, y in v] 
+    return MetricMeasureSpace(C)
+end
