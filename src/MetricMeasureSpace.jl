@@ -38,7 +38,7 @@ struct MetricMeasureSpace
         if typeof(μ) != Vector{Float64}
             μ = convert(Vector{Float64}, μ)
         end
-        if typeof(μ) != Matrix{Float64}
+        if typeof(C) != Matrix{Float64}
             C = convert(Matrix{Float64}, C)
         end
 
