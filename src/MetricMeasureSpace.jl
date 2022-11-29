@@ -52,10 +52,21 @@ struct MetricMeasureSpace
 end #struct
 
 
-function MetricMeasureSpace(k::Function, v::Vector)  
+function MetricMeasureSpace(
+        dist::Function,
+        v::Vector,
+        μ=(1/size(v)[1])*ones(size(v)[1])::Vector{<:Real}
+    )
+    """
+    External constructor. Given an array and dissimilarity function between its
+    elements calculates the distance matrix and constructs MetricMeasureSpace 
+    """
     if v isa Vector{Any}
         @warn "Vector is of type Vector{Any}."
     end
-    C = [k(x,y) for x in v, y in v] 
-    return MetricMeasureSpace(C)
+    C = [dist(x,y) for x in v, y in v] 
+    return MetricMeasureSpace(C, μ)
 end
+
+#TODO
+# add constructor with premetric in place of function
