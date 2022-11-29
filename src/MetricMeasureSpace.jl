@@ -9,8 +9,8 @@ struct MetricMeasureSpace
     mu::Vector{Float64}
 
     function MetricMeasureSpace(
-        C::Matrix{<:Real},
-        mu=(1/size(C)[1])*ones(size(C)[1])::Vector{<:Real}
+            C::Matrix{<:Real},
+            mu=(1/size(C)[1])*ones(size(C)[1])::Vector{<:Real}
         ) 
         """
         inner constructor. It forces the following behavior

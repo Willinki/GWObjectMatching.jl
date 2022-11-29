@@ -1,3 +1,3 @@
 module ObjectMatching
-include("MetricMeasureSpaces.jl")
+include("MetricMeasureSpace.jl")
 end # module ObjectMatching
