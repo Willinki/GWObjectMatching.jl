@@ -3,14 +3,14 @@ struct MetricMeasureSpace
     * C_{ij} is the distance/dissimilarity matrix of the graph, i.e. how much the i-th
     and the j-th nodes are different
 
-    * mu_i is the information on how much the i-th node is important
+    * μ_i is the information on how much the i-th node is important
     """
     C::Matrix{Float64}
-    mu::Vector{Float64}
+    μ::Vector{Float64}
 
     function MetricMeasureSpace(
             C::Matrix{<:Real},
-            mu=(1/size(C)[1])*ones(size(C)[1])::Vector{<:Real}
+            μ=(1/size(C)[1])*ones(size(C)[1])::Vector{<:Real}
         ) 
         """
         inner constructor. It forces the following behavior
