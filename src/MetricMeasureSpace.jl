@@ -18,37 +18,34 @@ struct MetricMeasureSpace
         - mu has the uniform distribution as standard value
         - The entrance of mu must be non-negative
         - C must be a square matrix and the size of C and mu must coincide
-        - At least an entrance of mu must be positive
+        - mu cannot be 
         - We force mu to sum at 1, a warning is raised in that case
         """
-        if size(C)[1] != size(C)[2]
-            error("The distance/dissimilarity matrix must be square.")
-        elseif size(C)[1]!= length(mu)
-            throw(ArgumentError("The size of C and mu must coincide."))
+        size(C)[1] != size(C)[2] && throw(ArgumentError(
+            "The distance/dissimilarity matrix must be square."
+        ))
+        size(C)[1] != length(μ) && throw(ArgumentError(
+            "The size of C and mu must coincide."
+        ))
+        any(μ .< 0) && throw(ArgumentError(
+            "The entrance of mu must be non-negative."
+        ))
+        iszero(μ) && throw(ArgumentError(
+            """mu can't be the zero vector, for the uniform distribution
+            just use MMS with μ as default"""
+        ))
+
+        if typeof(μ) != Vector{Float64}
+            μ = convert(Vector{Float64}, μ)
+        end
+        if typeof(μ) != Matrix{Float64}
+            C = convert(Matrix{Float64}, C)
         end
 
-        any(x->x<0, mu) && throw(ArgumentError("The entrance of mu must be non-negative."))
-
-        if iszero(mu)
-            throw(ArgumentError(
-                """mu can't be the zero vector, for the uniform distribution
-                just use MMS with only C as input."""
-            ))
-        end
-
-        if sum(mu) != 1
-            mu = (1/sum(mu))*mu
+        if sum(μ) != 1
+            μ = (1/sum(μ))*μ
             @info "We're changing mu in such a way it has sum 1."
         end
-
-        if typeof(C) == Matrix{Int64}                      #in realtà mi sembra che julia già lo faccia da solo 
-            #convert(Matrix{Float64},C)
-        end
-
-        ####typeof mu must be Vector{Float64}####
-        if typeof(mu) == Vector{Int64}                     #in realtà mi sembra che julia già lo faccia da solo 
-        #    convert(Vector{Float64},mu)
-        end
-        return new(C,mu)
+        return new(C,μ)
     end
 end #struct
