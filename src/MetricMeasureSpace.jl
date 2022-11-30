@@ -1,3 +1,5 @@
+import Distances: PreMetric, pairwise
+
 struct MetricMeasureSpace
     """
     * C_{ij} is the distance/dissimilarity matrix of the graph, i.e. how much the i-th
@@ -51,9 +53,10 @@ struct MetricMeasureSpace
     end
 end #struct
 
-
+distance_matrix(dist::Function, v::Vector) = [dist(x,y) for x in v, y in v] 
+distance_matrix(dist::PreMetric, v::Vector) = pairwise(dist, v) 
 function MetricMeasureSpace(
-        dist::Function,
+        dist::Union{Function, PreMetric},
         v::Vector,
         μ=(1/size(v)[1])*ones(size(v)[1])::Vector{<:Real}
     )
@@ -61,12 +64,6 @@ function MetricMeasureSpace(
     External constructor. Given an array and dissimilarity function between its
     elements calculates the distance matrix and constructs MetricMeasureSpace 
     """
-    if v isa Vector{Any}
-        @warn "Vector is of type Vector{Any}."
-    end
-    C = [dist(x,y) for x in v, y in v] 
-    return MetricMeasureSpace(C, μ)
+    v isa Vector{Any} && @warn "Elements vector is of type Vector{Any}."
+    return MetricMeasureSpace(distance_matrix(dist, v), μ)
 end
-
-#TODO
-# add constructor with premetric in place of function
