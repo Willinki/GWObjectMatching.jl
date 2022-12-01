@@ -45,4 +45,5 @@ Temporary Items
 .apdisk
 
 # toml file ## remove before final commit
-*.toml
+Project.toml
+Manifest.toml
