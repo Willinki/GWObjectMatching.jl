@@ -18,8 +18,7 @@ docs/build/
 docs/site/
 
 #macos stuff
-# General
-.DS_Store
+# General .DS_Store
 .AppleDouble
 .LSOverride
 
@@ -44,3 +43,6 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# toml file ## remove before final commit
+*.toml
