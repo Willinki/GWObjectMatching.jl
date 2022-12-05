@@ -1,10 +1,10 @@
 mutable struct iter_Sinkhorn
-        K::Matrix{Float64}, #K
-        T::Matrix{Float64}, #T
-        p::Vector{Float64}, #p
-        q::Vector{Float64}, #q
-        a::Vector{Float64}, #a
-        b::Vector{Float64}  #b
+        const K::Matrix{Float64}, #K
+        T::Matrix{Float64},       #T
+        const p::Vector{Float64}, #p
+        const q::Vector{Float64}, #q
+        a::Vector{Float64},       #a
+        b::Vector{Float64}        #b
 end
 
 function single_iteration_Sinkhorn(elem::iter_Sinkhorn)
