@@ -1,3 +1,10 @@
+import LinearAlgebra: diagm, norm
+
+"""
+Data structure for sinkhorn iteration.
+Has to be used inside RepeatUntilConvergence.
+# TODO: fill ddocumentation
+"""
 struct iter_Sinkhorn
         K::Matrix{Float64} 
         p::Vector{Float64} 
@@ -7,10 +14,13 @@ struct iter_Sinkhorn
         b::Vector{Float64}       
 end
 
+"""
+Update for single iteration
+"""
 function single_iteration_Sinkhorn(elem::iter_Sinkhorn)
     elem.a .= (elem.p)./(((elem.K)')*(elem.b))
     elem.b .= (elem.q)./(((elem.K)')*(elem.a))
-    elem.T .= diagm(elem.a)*K*diagm(elem.b)
+    elem.T .= diagm(elem.a)*elem.K*diagm(elem.b)
     return elem
 end
 
