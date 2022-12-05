@@ -1,9 +1,11 @@
 import LinearAlgebra: diagm, norm
+import ObjectMatching: RepeatUntilConvergence, execute!
 
 """
 Data structure for sinkhorn-knopp (SK) iteration.
 Has to be used inside RepeatUntilConvergence.
 # TODO: fill documentation
+# TODO: define proper constructor for this
 """
 struct data_SK
     K::Matrix{Float64} 

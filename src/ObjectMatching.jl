@@ -1,9 +1,9 @@
 module ObjectMatching
 
-#using Distances
 include("MetricMeasureSpace.jl")
 include("loss.jl")
 include("RepeatUntilConvergence.jl")
-include("sinkhorn.jl")
+include("SinkhornKnopp.jl")
+include("Barycenters.jl")
 
 end # module ObjectMatching
