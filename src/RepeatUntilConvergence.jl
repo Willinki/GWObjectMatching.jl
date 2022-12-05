@@ -79,8 +79,8 @@ end
 """
 Initializes initial values. Performs a while loop with specified conditions.
 Returns the last results and R.
-# TODO: CirculaBuffer is not optimal since convert takes O(n), might
-require an ad hoc thing
+# TODO: CircularBuffer is not optimal since convert takes O(n), might
+require an ad hoc thing in certain cases
 """
 function execute!(R::RepeatUntilConvergence, init_vals)
     R.init_vals = init_vals
