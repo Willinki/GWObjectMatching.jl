@@ -14,6 +14,7 @@ Returns a boolean value, if True, the loop is stopped.
 - history: contains values of returned parameters.
 # TODO: FIX DOCUMENTATION
 # TODO: INSERT THAT IF MEMORY SIZE IS ONE, history is not a vector 
+# TODO: maybe mutable can be removed
 """
 abstract type BaseRepeatUntilConvergence{T} end
 
