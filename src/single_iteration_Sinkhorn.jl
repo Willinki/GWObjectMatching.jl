@@ -15,12 +15,13 @@ function single_iteration_Sinkhorn(elem::iter_Sinkhorn)
 end
 
 function stop_crit_T(history::Vector{iter_Sinkhorn}; ϵ=10^{-8}::Float64)
-    norm(history[end].T - history[end-1].T,1) < ϵ
+    return norm(history[end].T - history[end-1].T,1) < ϵ
 end
 
 function stop_crit_marg(history::Vector{iter_Sinkhorn}; ϵ=10^{-6}::Float64)
-    max(
+    return max(
         norm(history[end].a - history[end-1].p,1) ,
         norm(history[end].b - history[end-1].q,1)  
     ) < ϵ
-end
+end 
+
