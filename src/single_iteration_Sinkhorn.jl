@@ -1,7 +1,7 @@
-mutable struct iter_Sinkhorn
-        const K::Matrix{Float64} 
-        const p::Vector{Float64} 
-        const q::Vector{Float64} 
+struct iter_Sinkhorn
+        K::Matrix{Float64} 
+        p::Vector{Float64} 
+        q::Vector{Float64} 
         T::Matrix{Float64}       
         a::Vector{Float64}       
         b::Vector{Float64}       
@@ -10,7 +10,7 @@ end
 function single_iteration_Sinkhorn(elem::iter_Sinkhorn)
     elem.a .= (elem.p)./(((elem.K)')*(elem.b))
     elem.b .= (elem.q)./(((elem.K)')*(elem.a))
-    elem.T = diagm(elem.a)*K*diagm(elem.b)
+    elem.T .= diagm(elem.a)*K*diagm(elem.b)
     return elem
 end
 
