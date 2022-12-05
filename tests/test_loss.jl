@@ -1,5 +1,5 @@
 import Test: @test, @test_throws, @testset
-import ObjectMatching: loss
+import ObjectMatching: loss, GW_Cost
 import ObjectMatching: MetricMeasureSpace 
 
 
