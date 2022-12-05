@@ -13,8 +13,11 @@ Returns a boolean value, if True, the loop is stopped.
 - init_vals: Any. Initial values for update_func
 - history: contains values of returned parameters.
 # TODO: FIX DOCUMENTATION
+# TODO: INSERT THAT IF MEMORY SIZE IS ONE, history is not a vector 
 """
-mutable struct RepeatUntilConvergence{T}
+abstract type BaseRepeatUntilConvergence{T} end
+
+mutable struct RepeatUntilConvergence{T} <: BaseRepeatUntilConvergence{T}
     update_func::Function
     has_converged::Function
     history::CircularBuffer{T}
@@ -42,6 +45,37 @@ mutable struct RepeatUntilConvergence{T}
     end
 end
 
+mutable struct LargeMemoryRepeatUntilConvergence{T} <: BaseRepeatUntilConvergence{T}
+    update_func::Function
+    has_converged::Function
+    history::Vector{T}
+    init_vals::T
+
+    function LargeMemoryRepeatUntilConvergence{T}(
+        update_func::Function,
+        has_converged::Function;
+        memory_size=10::Int64
+        ) where T
+        throw("Not implemented")
+    end
+end
+
+mutable struct SingleValueRepeatUntilConvergence{T} <: BaseRepeatUntilConvergence{T}
+    update_func::Function
+    has_converged::Function
+    history::T
+    init_vals::T
+
+    function SingleValueRepeatUntilConvergence{T}(
+        update_func::Function,
+        has_converged::Function;
+        memory_size=10::Int64
+        ) where T
+        throw("Not implemented")
+    end
+end
+
+
 """
 Initializes initial values. Performs a while loop with specified conditions.
 Returns the last results and R.
@@ -58,5 +92,3 @@ function execute!(R::RepeatUntilConvergence, init_vals)
     end
     return iter_results, R
 end
-
-    
