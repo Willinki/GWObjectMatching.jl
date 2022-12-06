@@ -18,10 +18,23 @@ struct data_SK
     function data_SK(
             K::Matrix{Float64},
             p::Vector{Float64}, 
-            q::Vector{Float64}
+            q::Vector{Float64},
+            T::Matrix{Float64}
         )
+        #TODO: check size! K e T stesse taglie, p <-> numero righr, q <-> numero colonne
 
-        T = 1/(length(p.μ)*length(q.μ))*ones(length(p.μ),length(q.μ))
+        (size(T,1) == size(K,1) && size(T,2) == size(K,2)) || throw(ArgumentError(
+            "The size of T and K doesn't match."
+        ))
+
+        size(T,1) == length(p) || throw(ArgumentError(
+            "The number of rows of T must be the same of the length of p."
+        ))
+
+        size(T,2) == length(q) || throw(ArgumentError(
+            "The number of clomuns of T must be the same of the length of q."
+        ))
+        
         a = 1/(length(p.μ))*ones(length(p.μ))
         b = q./((K')*a)
         return new(K, p, q, T, a, b)
@@ -33,7 +46,7 @@ end
 Update for single iteration
 """
 function update_SK(elem::data_SK)::data_SK
-    elem.a .= (elem.p)./(((elem.K)')*(elem.b))
+    elem.a .= (elem.p)./((elem.K)*(elem.b))
     elem.b .= (elem.q)./(((elem.K)')*(elem.a))
     elem.T .= diagm(elem.a)*elem.K*diagm(elem.b)
     return elem

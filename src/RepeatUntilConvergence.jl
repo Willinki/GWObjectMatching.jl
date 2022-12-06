@@ -27,7 +27,7 @@ mutable struct RepeatUntilConvergence{T} <: BaseRepeatUntilConvergence{T}
     function RepeatUntilConvergence{T}(
         update_func::Function,
         has_converged::Function;
-        memory_size=10::Int64
+        memory_size=2::Int64
         ) where T
         hasmethod(update_func, (T, )) || throw(ArgumentError(
             "The provided update_func has no method for type $(T)"
