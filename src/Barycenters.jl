@@ -18,7 +18,7 @@ function update_barycenters(
     ))
 
     # initialize C uniform
-    C = OM.MetricMeasureSpace(ones(Float64, length(p.mu), length(p.mu)), p)
+    C = OM.MetricMeasureSpace(ones(Float64, length(p.D), length(p.D)), p)
     # obtain optimal transport
     update_transport_updated = update_transport $ (Cp=C, loss=loss, ϵ=ϵ, tol=tol)
     Ts_collection = map(update_transport_updated, Cs_collection)
@@ -33,11 +33,11 @@ function update_transport(
         ϵ::Float64,
         tol::Float64,
     )
-    Np, Ns = (length(Cp.μ), length(Cs.μ))
+    Np, Ns = (length((Cp.μ).D), length((Cs.μ).D))
     T = ones(Np, Ns)./(Np*Ns)
     K = OM.GW_cost(loss, Cp, Cs, T, ϵ)
     # define stop sk tolerance
-    SK_initial_point = OM.data_SK(K, Cp.μ, Cs.μ, T)
+    SK_initial_point = OM.data_SK(K, (Cp.μ).D, (Cs.μ).D, T)
     SK_repeater = OM.RepeatUntilConvergence{OM.data_SK}(OM.update_SK, OM.stop_SK_T)
     _, T = execute!(SK_repeater, SK_initial_point)
     return T
