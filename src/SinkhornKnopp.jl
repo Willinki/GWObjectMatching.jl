@@ -18,10 +18,11 @@ struct data_SK
     function data_SK(
             K::Matrix{Float64},
             p::Vector{Float64}, 
-            q::Vector{Float64}
+            q::Vector{Float64},
+            T::Matrix{Float64}
         )
-
-        T = 1/(length(p.μ)*length(q.μ))*ones(length(p.μ),length(q.μ))
+        #TODO: check size! K e T stesse taglie, p <-> numero righr, q <-> numero colonne
+        
         a = 1/(length(p.μ))*ones(length(p.μ))
         b = q./((K')*a)
         return new(K, p, q, T, a, b)
