@@ -46,7 +46,7 @@ function GW_Cost(L::loss, M::MetricMeasureSpace, N::MetricMeasureSpace, T::Matri
 
     E = ((L.f1).(M.C))*((M.μ)*(ones(size(T,2)))') + ones(size(T,1))*((N.μ)'*((L.f2).(N.C))') - ((L.h1).(M.C))*T*((L.h2).(N.C))' 
 
-    E .= exp.(-E./\epsilon)
+    E .= exp.(-E./ϵ)
 
     return E
 end #function
