@@ -14,6 +14,19 @@ struct data_SK
     T::Matrix{Float64}       
     a::Vector{Float64}       
     b::Vector{Float64}       
+
+    function data_SK(
+            K::Matrix{Float64},
+            p::Vector{Float64}, 
+            q::Vector{Float64}
+        )
+
+        T = 1/(length(p.μ)*length(q.μ))*ones(length(p.μ),length(q.μ))
+        a = 1/(length(p.μ))*ones(length(p.μ))
+        b = q./((K')*a)
+        return new(K, p, q, T, a, b)
+        
+    end
 end
 
 """
