@@ -6,9 +6,68 @@ and the j-th nodes are different
 
 * μ_i is the information on how much the i-th node is important
 """
+abstract type NormalizedPositiveVector end
+
+struct DiscreteProbability <: NormalizedPositiveVector
+    D::Vector{Float64}
+    """
+    inner constructor. It forces the vector to be non-negative and
+    to have sum 1.
+    """
+    function DiscreteProbability(D::Vector{Float64})
+
+        any(D .< 0) && throw(ArgumentError(
+            "The entrance of D must be non-negative."
+        ))
+        iszero(D) && throw(ArgumentError(
+            """D can't be the zero vector."""
+        ))
+
+        if typeof(D) != Vector{Float64}
+            D = convert(Vector{Float64}, D)
+        end
+
+        if sum(D) != 1
+            D .= (1/sum(D)).*D
+            @info "We're changing D in such a way it has sum 1."
+        end
+
+        return new(D)  
+    end
+end
+
+struct ConvexSum <: NormalizedPositiveVector
+    v::Vector{Float64}
+    """
+    inner constructor. It forces the vector to be non-negative and
+    to have sum 1.
+    """
+    function ConvexSum(D::Vector{Float64})
+
+        any(D .< 0) && throw(ArgumentError(
+            "The entrance of D must be non-negative."
+        ))
+        iszero(D) && throw(ArgumentError(
+            """D can't be the zero vector."""
+        ))
+
+        if typeof(D) != Vector{Float64}
+            D = convert(Vector{Float64}, D)
+        end
+
+        if sum(D) != 1
+            D .= (1/sum(D)).*D
+            @info "We're changing D in such a way it has sum 1."
+        end
+
+        return new(D)
+    end
+
+end
+
 struct MetricMeasureSpace
     C::Matrix{Float64}
-    μ::Vector{Float64}
+    μ::DiscreteProbability
 
     """
     inner constructor. It forces the following behavior
@@ -21,33 +80,35 @@ struct MetricMeasureSpace
     """
     function MetricMeasureSpace(
             C::Matrix{<:Real},
-            μ=fill(1/size(C,1), size(C,1))::Vector{<:Real}
+            μ=DiscreteProbability(
+                fill(1/size(C,1), size(C,1))
+            )::DiscreteProbability
         ) 
         size(C, 1) != size(C, 2) && throw(ArgumentError(
             "The distance/dissimilarity matrix must be square."
         ))
-        size(C, 1) != length(μ) && throw(ArgumentError(
+        size(C, 1) != length(μ.D) && throw(ArgumentError(
             "The size of C and mu must coincide."
         ))
-        any(μ .< 0) && throw(ArgumentError(
-            "The entrance of mu must be non-negative."
-        ))
-        iszero(μ) && throw(ArgumentError(
-            """mu can't be the zero vector, for the uniform distribution
-            just use MMS with μ as default"""
-        ))
+        #any(μ .< 0) && throw(ArgumentError(
+        #    "The entrance of mu must be non-negative."
+        #))
+        #iszero(μ) && throw(ArgumentError(
+        #    """mu can't be the zero vector, for the uniform distribution
+        #    just use MMS with μ as default"""
+        #))
 
-        if typeof(μ) != Vector{Float64}
-            μ = convert(Vector{Float64}, μ)
-        end
+        #if typeof(μ) != Vector{Float64}
+        #    μ = convert(Vector{Float64}, μ)
+        #end
         if typeof(C) != Matrix{Float64}
             C = convert(Matrix{Float64}, C)
         end
 
-        if sum(μ) != 1
-            μ .= (1/sum(μ)).*μ
-            @info "We're changing mu in such a way it has sum 1."
-        end
+        #if sum(μ) != 1
+        #    μ .= (1/sum(μ)).*μ
+        #    @info "We're changing mu in such a way it has sum 1."
+        #end
 
         return new(C,μ)
     end
@@ -64,7 +125,9 @@ We chose isconcretetype to allow for strings arrays.
 function MetricMeasureSpace(
         dist::Union{Function, PreMetric},
         v::Vector,
-        μ=fill(1/size(v), size(v))::Vector{<:Real}
+        μ=DiscreteProbability(
+            fill(1/size(v), size(v))::DiscreteProbability
+        )
     )
     isconcretetype(eltype(v)) && @warn "Vector dist is not homogeneous."
     return MetricMeasureSpace(distance_matrix(dist, v), μ)
