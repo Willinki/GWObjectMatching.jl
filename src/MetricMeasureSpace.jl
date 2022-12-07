@@ -67,7 +67,7 @@ end
 
 struct MetricMeasureSpace
     C::Matrix{Float64}
-    μ::DiscreteProbability
+    μ::Vector{Float64}
 
     """
     inner constructor. It forces the following behavior
@@ -78,18 +78,19 @@ struct MetricMeasureSpace
     - mu cannot be 
     - We force mu to sum at 1, a warning is raised in that case
     """
+
     function MetricMeasureSpace(
             C::Matrix{<:Real},
-            μ=DiscreteProbability(
-                fill(1/size(C,1), size(C,1))
-            )::DiscreteProbability
+            μ=fill(1/size(C,1), size(C,1))::Vector{Float64}
         ) 
         size(C, 1) != size(C, 2) && throw(ArgumentError(
             "The distance/dissimilarity matrix must be square."
         ))
-        size(C, 1) != length(μ.D) && throw(ArgumentError(
+        size(C, 1) != length(μ) && throw(ArgumentError(
             "The size of C and mu must coincide."
         ))
+
+        prob = DiscreteProbability(μ)
         #any(μ .< 0) && throw(ArgumentError(
         #    "The entrance of mu must be non-negative."
         #))
@@ -110,8 +111,8 @@ struct MetricMeasureSpace
         #    @info "We're changing mu in such a way it has sum 1."
         #end
 
-        return new(C,μ)
-    end
+        return new(C,prob.D)
+    end #innerconstructor
 end #struct
 
 distance_matrix(dist::Function, v::Vector) = [dist(x,y) for x in v, y in v] 
@@ -125,10 +126,9 @@ We chose isconcretetype to allow for strings arrays.
 function MetricMeasureSpace(
         dist::Union{Function, PreMetric},
         v::Vector,
-        μ=DiscreteProbability(
-            fill(1/size(v), size(v))::DiscreteProbability
+        μ=fill(1/size(v), size(v)::Vector{Float64}
         )
     )
     isconcretetype(eltype(v)) && @warn "Vector dist is not homogeneous."
-    return MetricMeasureSpace(distance_matrix(dist, v), μ)
+    return MetricMeasureSpace(distance_matrix(dist, v), DiscreteProbability(μ).D)
 end

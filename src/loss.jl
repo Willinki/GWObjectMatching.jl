@@ -5,6 +5,7 @@ struct loss
         - "L2" for the squared loss L(a,b) = |a-b|^2
         - "KL" for the Kullback-Leibler loss L(a,b) = a*log(a/b)-a+b
     """
+    string::String
     f1::Function
     f2::Function
     h1::Function
@@ -12,11 +13,13 @@ struct loss
 
     function loss(s::String)
         if s == "L2"
+            #string = s
             f1 = x->x^2
             f2 = x->x^2
             h1 = x->x
             h2 = x->2*x
         elseif s == "KL"
+            #string = s
             f1 = x->x*log(x)
             f2 = x->x
             h1 = x->x
@@ -24,7 +27,7 @@ struct loss
         else
             throw(ArgumentError("Not valid input: it doesn't describe any known loss function."))
         end
-        new(f1,f2,h1,h2)
+        new(s,f1,f2,h1,h2)
     end #innerconstructor
   
 end #struct
@@ -44,7 +47,7 @@ function GW_Cost(L::loss, M::MetricMeasureSpace, N::MetricMeasureSpace, T::Matri
 
     E = (M.C)*T*(N.C)
 
-    E = ((L.f1).(M.C))*(((M.μ).D)*(ones(size(T,2)))') + ones(size(T,1))*(((N.μ).D)'*((L.f2).(N.C))') - ((L.h1).(M.C))*T*((L.h2).(N.C))' 
+    E = ((L.f1).(M.C))*((M.μ)*(ones(size(T,2)))') + ones(size(T,1))*((N.μ)'*((L.f2).(N.C))') - ((L.h1).(M.C))*T*((L.h2).(N.C))' 
 
     E .= exp.(-E./ϵ)
 

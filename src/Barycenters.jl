@@ -7,7 +7,7 @@ using PartialFunctions
 function update_barycenters(
         Cs_collection::Vector{OM.MetricMeasureSpace},
         λs_collection::OM.ConvexSum,
-        p::OM.DiscreteProbability;
+        p::Vector{Float64};
         loss=OM.loss("L2")::OM.loss,
         ϵ=1e-2::Float64,
         tol=1e-8::Float64
@@ -18,7 +18,7 @@ function update_barycenters(
     ))
 
     # initialize C uniform
-    C = OM.MetricMeasureSpace(ones(Float64, length(p.D), length(p.D)), p)
+    C = OM.MetricMeasureSpace(ones(Float64, length(p), length(p)), p)
     # obtain optimal transport
     update_transport_updated = update_transport $ (Cp=C, loss=loss, ϵ=ϵ, tol=tol)
     Ts_collection = map(update_transport_updated, Cs_collection)
@@ -33,11 +33,11 @@ function update_transport(
         ϵ::Float64,
         tol::Float64,
     )
-    Np, Ns = (length((Cp.μ).D), length((Cs.μ).D))
+    Np, Ns = (length(Cp.μ), length(Cs.μ))
     T = ones(Np, Ns)./(Np*Ns)
     K = OM.GW_cost(loss, Cp, Cs, T, ϵ)
     # define stop sk tolerance
-    SK_initial_point = OM.data_SK(K, (Cp.μ).D, (Cs.μ).D, T)
+    SK_initial_point = OM.data_SK(K, Cp.μ, Cs.μ, T)
     SK_repeater = OM.RepeatUntilConvergence{OM.data_SK}(OM.update_SK, OM.stop_SK_T)
     _, T = execute!(SK_repeater, SK_initial_point)
     return T
