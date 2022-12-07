@@ -11,13 +11,13 @@ Main function:
 - extracts meaningful pixels (as points in R^2)
 - rescale points between 0 and 1
 - applies random rotation
-- randomly samples acco
+- randomly samples according to fraction or number n
 Returns: 
 - Vector{Vector{Float64, n=2}}
 """
 function load_image(
     filename::String ;
-    n::Union{Int64, Float64}=1.
+    n::Union{Int64, Float64}=1
     )::Vector{Vector{Float64}}
     # TODO: set better path handling
     points = (
