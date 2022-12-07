@@ -24,8 +24,7 @@ function load_image(
         load(filename) |> normalize_image
         |> get_coord_black_points |> rescale |> randomRotate_points
     )
-    n==1 &&
-        return points
+    n==1 && return points
     return undersample(points, n)
 end
 
