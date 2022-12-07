@@ -5,6 +5,7 @@ struct loss
         - "L2" for the squared loss L(a,b) = |a-b|^2
         - "KL" for the Kullback-Leibler loss L(a,b) = a*log(a/b)-a+b
     """
+    string::String
     f1::Function
     f2::Function
     h1::Function
@@ -12,11 +13,13 @@ struct loss
 
     function loss(s::String)
         if s == "L2"
+            #string = s
             f1 = x->x^2
             f2 = x->x^2
             h1 = x->x
             h2 = x->2*x
         elseif s == "KL"
+            #string = s
             f1 = x->x*log(x)
             f2 = x->x
             h1 = x->x
@@ -24,13 +27,13 @@ struct loss
         else
             throw(ArgumentError("Not valid input: it doesn't describe any known loss function."))
         end
-        new(f1,f2,h1,h2)
+        new(s,f1,f2,h1,h2)
     end #innerconstructor
   
 end #struct
 
 
-function GW_Cost(L::loss, M::MetricMeasureSpace, N::MetricMeasureSpace, T::Matrix{Float64}, ϵ::Float{64})
+function GW_Cost(L::loss, M::MetricMeasureSpace, N::MetricMeasureSpace, T::Matrix{Float64}, ϵ::Float64)
     """
     This function evaluate the tensor product mathcal{L}(M.C,N.C) tensor T, using the decomposition of a loss function in f1,f2,h1,h2.
     About T: all the operation makes sense if T is any matrix of the correct size, but to make sense T must be a transport plan between

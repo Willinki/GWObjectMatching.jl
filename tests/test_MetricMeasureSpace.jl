@@ -1,9 +1,9 @@
 import Test: @test, @test_throws, @testset
-import ObjectMatching: MetricMeasureSpace
+import ObjectMatching: MetricMeasureSpace, DiscreteProbability, NormalizedPositiveVector
 
 
 @testset "MetricMeasureSpace" begin
-    dim::Int64 = rand(1:100)
+    dim::Int64 = 10
     C          = rand(Float64, (2,2))
     μ          = rand(Float64, 2)
     M          = MetricMeasureSpace(C, μ)
@@ -12,7 +12,7 @@ import ObjectMatching: MetricMeasureSpace
     @test_throws ArgumentError MetricMeasureSpace(C, Float64[-1, 1])
 
     # once constructed, mu sums to 1
-    @test sum(M.μ)==1
+    @test 1-sum(M.μ)==0
 
     function mu_is_constant_when_default(C)
         mu_mms = MetricMeasureSpace(C).μ

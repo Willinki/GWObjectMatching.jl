@@ -7,7 +7,7 @@ using PartialFunctions
 function update_barycenters(
         Cs_collection::Vector{OM.MetricMeasureSpace},
         λs_collection::OM.ConvexSum,
-        p::OM.DiscreteProbability;
+        p::Vector{Float64};
         loss=OM.loss("L2")::OM.loss,
         ϵ=1e-2::Float64,
         tol=1e-8::Float64
@@ -18,12 +18,12 @@ function update_barycenters(
     ))
 
     # initialize C uniform
-    C = OM.MetricMeasureSpace(ones(Float64, length(p.mu), length(p.mu)), p)
+    C = OM.MetricMeasureSpace(ones(Float64, length(p), length(p)), p)
     # obtain optimal transport
     update_transport_updated = update_transport $ (Cp=C, loss=loss, ϵ=ϵ, tol=tol)
     Ts_collection = map(update_transport_updated, Cs_collection)
     # compute C barycenter
-    C = compute_C(Ts_collection, λs_collection, p)
+    C = compute_C(λs_collection, Ts_collection, Cs_collection, p)
 end
 
 function update_transport(
@@ -43,6 +43,18 @@ function update_transport(
     return T
 end
 
-function compute_C()
-    throw("Not implemented")
+function compute_C(
+    λs_collection::OM.ConvexSum, 
+    Ts_collection::Vector{Matrix{Float64}}, 
+    Cs_collection::Vector{OM.MetricMeasureSpace},
+    p::Vector{Float64}
+    )
+    S = length(λs_collection.v)
+    Ms_collection = fill(zeros(length(p),length(p)), S)
+    for i = 1:S
+        Ms_collection[i] = λs_collection.v[i]*(
+            transpose(Ts_collection[i])*((Cs_collection[i].C)*(Ts_collection[i]))
+            )         
+    end
+    return (sum(Ms_collection)./(p*p'))
 end
