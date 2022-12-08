@@ -30,6 +30,10 @@ import ObjectMatching: MetricMeasureSpace, DiscreteProbability, ConvexSum, Norma
         Cs_collection, λs_collection, Ts_collection, p, loss("KL")
         )
 
+    @test_throws ArgumentError compute_C(
+        λs_collection,Ts_collection,[MetricMeasureSpace([-1 1; 1 0]),N],p, loss("KL")
+        )
+
     #function p_is_strictly_positive(MMS::MetricMeasureSpace)
     #    mu_mms = MMS.μ
     #    return mu_mms[1]>0

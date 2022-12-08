@@ -67,6 +67,10 @@ function compute_C(
         return OM.MetricMeasureSpace((sum(Ms_collection)./(p*p')),p)
     else #if loss.string == "KL"
         for i = 1:S
+            j = size((Cs_collection[i].C),1)
+            (((Cs_collection[i].C).>=0) == ones(j,j)) || throw(ArgumentError(
+                "If the loss is the KL-loss, all the Cs' must be non-negative."
+            ))
             Ms_collection[i] = λs_collection.v[i]*(
                 (Ts_collection[i]')*(log.(Cs_collection[i].C)*(Ts_collection[i]))
                 ) 
