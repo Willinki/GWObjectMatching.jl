@@ -1,9 +1,10 @@
 import FileIO: load
 import ColorTypes: RGBA, RGB
 import Images: N0f8
+import MultivariateStats: MetricMDS, fit, predict, isotonic
 using LinearAlgebra
 
-Imagetype::Type = Union{Matrix{RGBA{N0f8}}, Matrix{RGBA{N0f8}}}
+Imagetype::Type = Union{Matrix{RGBA{N0f8}}, Matrix{RGB{N0f8}}}
 
 """
 Main function:
@@ -14,15 +15,12 @@ Main function:
 - randomly samples according to fraction or number n
 Returns: 
 - Vector{Vector{Float64, n=2}}
+# TODO: set better path handling
 """
-function load_image(
-    filename::String ;
-    n::Union{Int64, Float64}=1
-    )::Vector{Vector{Float64}}
-    # TODO: set better path handling
+function load_image(filename::String ; n::Union{Int64, Float64}=1e1)::Matrix{Float64}
     points = (
-        load(filename) |> normalize_image
-        |> get_coord_black_points |> rescale |> randomRotate_points
+        load(filename) |> normalize_image |> get_coord_black_points
+        |> rescale_convert_to_float |> randomRotate_points
     )
     n==1 && return points
     return undersample(points, n)
@@ -35,10 +33,10 @@ given a loaded image, returns a matrix of 0 and 1
 function normalize_image(img::Imagetype)::Matrix{Bool}
     """
     this is for png
-    we return true if color != (white) or alpha!=0
+    we return true if color = black or alpha!=0
     """
     function normalize_pixel(pix::RGBA{N0f8})::Bool
-        return !(pix.alpha == 0 || ((pix.r + pix.g + pix.b) ≈ 3))
+        return (pix.alpha ≈ 1) 
     end
 
     """
@@ -46,9 +44,9 @@ function normalize_image(img::Imagetype)::Matrix{Bool}
     we return true if have or color != (white)
     """
     function normalize_pixel(pix::RGB{N0f8})::Bool
-        return !((pix.r + pix.g + pix.b) ≈ 3)
+        return (pix.r + pix.g + pix.b) ≈ 0
     end
-    # applies and returns 
+
     return map(normalize_pixel, img)::Matrix{Bool}
 end
 
@@ -63,11 +61,11 @@ end
 """
 each coordinate is normalized to be between 0 and 1
 """
-function rescale(coords::Matrix{Int64})::Matrix{Float64}
+function rescale_convert_to_float(coords::Matrix{Int64})::Matrix{Float64}
     function rescale_vec(V::Vector{Int64})
         minV, maxV = minimum(V), maximum(V)
         minV == maxV && return V./minV
-        return (V .- minV)/(maxV - minV)
+        return (V .- minV)./(maxV - minV)
     end
     return mapslices(rescale_vec, coords, dims=1)
 end
@@ -91,23 +89,32 @@ end
 """
 keeps only n-fraction of elements in v 
 """
-function undersample(v::Vector{Vector{Float64}}, n::Float64)
-    throw("not implemented")
+function undersample(v::Matrix{Float64}, n::Float64)
+    return undersample(v, round(Int64, n*size(v, 1)))
 end
 
 """
 keeps only n elements in v 
 """
-function undersample(v::Vector{Vector{Float64}}, n::Int64)
-    throw("not implemented")
+function undersample(v::Matrix{Float64}, n::Int64)
+    0 < n < size(v, 1) || throw(ArgumentError(
+        "Provide a valid fraction or number for downsampling"
+    ))
+    return v[rand(1:size(v, 1), n), :]
 end
 
 """
 PCA to reconstruct images
 """
-function distances_to_points(dist_matrix::Matrix{Float64})
-    throw("Not implemented")
+function reconstruct_points(distance_matrix::Matrix{Float64}; kwargs...)
+    mds = fit(
+        MetricMDS, distance_matrix;
+        distances=true, maxoutdim=2, 
+        kwargs...
+    )
+    return predict(mds)'
 end
 
 # PLOTTING FUNCTIONS
 # TODO
+# one for barycenter, one for interpolation
