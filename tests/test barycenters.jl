@@ -1,5 +1,5 @@
 import Test: @test, @test_throws, @testset
-import ObjectMatching: compute_C
+import ObjectMatching: compute_C, loss, update_barycenters, GW_Cost
 import ObjectMatching: MetricMeasureSpace, DiscreteProbability, ConvexSum, NormalizedPositiveVector
 
 @testset "barycenters" begin
@@ -15,12 +15,28 @@ import ObjectMatching: MetricMeasureSpace, DiscreteProbability, ConvexSum, Norma
         Cs_collection::Vector{MetricMeasureSpace},
         λs_collection::ConvexSum,
         Ts_collection::Vector{Matrix{Float64}},
-        p::Vector{Float64}
+        p::Vector{Float64},
+        loss::loss
         )
-        C = compute_C(λs_collection,Ts_collection,Cs_collection,p)
-        return size(C,1) == size(C,2)
+        MMS = compute_C(λs_collection,Ts_collection,Cs_collection,p, loss)
+        return size(MMS.C,1) == size(MMS.C,2)
     end
 
-    @test compute_C_returns_square_matrix(Cs_collection, λs_collection, Ts_collection, p)
+    @test compute_C_returns_square_matrix(
+        Cs_collection, λs_collection, Ts_collection, p, loss("L2")
+        ) 
+
+    @test compute_C_returns_square_matrix(
+        Cs_collection, λs_collection, Ts_collection, p, loss("KL")
+        )
+
+    #function p_is_strictly_positive(MMS::MetricMeasureSpace)
+    #    mu_mms = MMS.μ
+    #    return mu_mms[1]>0
+    #end
+
+    #@test p_is_strictly_positive(
+    #    update_barycenters(Cs_collection, λs_collection, [0.0, 1.0, 0.0, 2.0])
+    #    )
 
 end  
