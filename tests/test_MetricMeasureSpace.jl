@@ -12,7 +12,7 @@ import ObjectMatching: MetricMeasureSpace, DiscreteProbability, NormalizedPositi
     @test_throws ArgumentError MetricMeasureSpace(C, Float64[-1, 1])
 
     # once constructed, mu sums to 1
-    @test 1-sum(M.μ)==0
+    @test 1-sum(M.μ)≈0
 
     function mu_is_constant_when_default(C)
         mu_mms = MetricMeasureSpace(C).μ
