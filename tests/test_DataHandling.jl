@@ -5,8 +5,8 @@ import ObjectMatching as OM
 using Plots
 
 # FIXTURES
-N::Int64 = 2000
-parameters = Dict([(:maxiter, 2000), (:tol,1e-1)])
+N::Int64 = 500
+parameters = Dict([(:maxiter, 2000), (:tol,1e-2)])
 img_path::String = "../src/data/shapes/heart.png"
 img_path_gif::String = "../src/data/shapes/apple0.gif"
 img_path_png::String = "../src/data/shapes/annulus.png"

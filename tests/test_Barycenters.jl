@@ -2,7 +2,7 @@ import Test: @test, @test_throws, @testset
 import ObjectMatching: compute_C, loss, update_barycenters, GW_Cost
 import ObjectMatching: MetricMeasureSpace, DiscreteProbability, ConvexSum, NormalizedPositiveVector
 
-@testset "barycenters" begin
+@testset "Compute Barycenters" begin
 
     M = MetricMeasureSpace(rand(2,2))
     N = MetricMeasureSpace(rand(3,3))
@@ -12,13 +12,13 @@ import ObjectMatching: MetricMeasureSpace, DiscreteProbability, ConvexSum, Norma
     p = [0.2,0.4,0.4]
 
     function compute_C_returns_square_matrix(
-        Cs_collection::Vector{MetricMeasureSpace},
-        λs_collection::ConvexSum,
-        Ts_collection::Vector{Matrix{Float64}},
-        p::Vector{Float64},
-        loss::loss
+            Cs_collection::Vector{MetricMeasureSpace},
+            λs_collection::ConvexSum,
+            Ts_collection::Vector{Matrix{Float64}},
+            p::Vector{Float64},
+            loss::loss
         )
-        MMS = compute_C(λs_collection,Ts_collection,Cs_collection,p, loss)
+        MMS = compute_C(λs_collection, Ts_collection, Cs_collection, p, loss)
         return size(MMS.C,1) == size(MMS.C,2)
     end
 

@@ -58,6 +58,6 @@ import ObjectMatching: RepeatUntilConvergence, execute!
         res, _ = execute!(R, 0.001)
         return res
     end
-    @test test_works_if_stop_has_default_args() < 0.0001
+    @test test_works_if_stop_function_has_default_args() < 0.0001
 end
 

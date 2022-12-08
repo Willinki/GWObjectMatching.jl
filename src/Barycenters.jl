@@ -18,7 +18,7 @@ function update_barycenters(
     ))
 
     #WLOG we can assume that p.>0, if it is not we discard its zero elements
-    p = filter!(e->e!= 0,p)
+    p = filter!(e->e!=0, p)
 
     # initialize C uniform
     C = OM.MetricMeasureSpace(ones(Float64, length(p), length(p)), p)
@@ -50,14 +50,15 @@ function update_transport(
 end
 
 function compute_C(
-    λs_collection::OM.ConvexSum, 
-    Ts_collection::Vector{Matrix{Float64}}, 
-    Cs_collection::Vector{OM.MetricMeasureSpace},
-    p::Vector{Float64},
-    loss::OM.loss
+        λs_collection::OM.ConvexSum, 
+        Ts_collection::Vector{Matrix{Float64}}, 
+        Cs_collection::Vector{OM.MetricMeasureSpace},
+        p::Vector{Float64},
+        loss::OM.loss
     )
     S = length(λs_collection.v)
     Ms_collection = fill(zeros(length(p),length(p)), S)
+    # TODO: improve syntax
     if loss.string == "L2"
         for i = 1:S
             Ms_collection[i] = λs_collection.v[i]*(
