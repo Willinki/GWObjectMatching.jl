@@ -34,10 +34,10 @@ import ObjectMatching: MetricMeasureSpace, DiscreteProbability, ConvexSum, Norma
         λs_collection,Ts_collection,[MetricMeasureSpace([-1 1; 1 0]),N],p, loss("KL")
         )
 
-    #function p_is_strictly_positive(MMS::MetricMeasureSpace)
-    #    mu_mms = MMS.μ
-    #    return mu_mms[1]>0
-    #end
+    function p_is_strictly_positive(MMS::MetricMeasureSpace)
+        mu_mms = MMS.μ
+        return mu_mms[1]>0
+    end
 
     #@test p_is_strictly_positive(
     #    update_barycenters(Cs_collection, λs_collection, [0.0, 1.0, 0.0, 2.0])
