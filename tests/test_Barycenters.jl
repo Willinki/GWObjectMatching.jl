@@ -39,8 +39,8 @@ import ObjectMatching: MetricMeasureSpace, DiscreteProbability, ConvexSum, Norma
         return mu_mms[1]>0
     end
 
-    #@test p_is_strictly_positive(
-    #    update_barycenters(Cs_collection, λs_collection, [0.0, 1.0, 0.0, 2.0])
-    #    )
+    @test p_is_strictly_positive(
+        update_barycenters(Cs_collection, λs_collection, [0.0, 1.0, 0.0, 2.0])
+        )
 
 end  

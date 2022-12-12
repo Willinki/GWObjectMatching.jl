@@ -34,7 +34,7 @@ struct data_SK
             "The number of columns of T must be the same of the length of q."
         ))
         
-        a = 1/(length(p.μ))*ones(length(p.μ))
+        a = 1/(length(p))*ones(length(p))
         b = q./((K')*a)
         return new(K, p, q, T, a, b)
         
@@ -54,10 +54,10 @@ end
 """
 First proposal for stopping criterion, stops whenever transport is stable
 """
-
-function stop_SK_T(history::Vector{data_SK}; ϵ=10^(-8)::Float64)::Bool
+function stop_SK_T(history::Vector{data_SK}; ϵ=1e-8::Float64)::Bool
     length(history) == 1 && return false
-    return norm(history[end].T - history[end-1].T,1) < ϵ
+    a = norm(history[end].T - history[end-1].T, 1)
+    return norm(history[end].T - history[end-1].T, 1)::Float64 < ϵ
 end
 
 """
@@ -68,5 +68,5 @@ function stop_SK_ab(history::Vector{data_SK}; ϵ=10^(-6)::Float64)::Bool
     return max(
         norm(history[end].a - history[end].p,1) ,
         norm(history[end].b - history[end].q,1)  
-    ) < ϵ
+    )::Float64 < ϵ
 end

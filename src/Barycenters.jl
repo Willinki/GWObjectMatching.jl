@@ -7,7 +7,7 @@ using PartialFunctions
 function update_barycenters(
         Cs_collection::Vector{OM.MetricMeasureSpace},
         λs_collection::OM.ConvexSum,
-        p::Vector{Float64};
+        p::Vector{Float64},
         loss=OM.loss("L2")::OM.loss,
         ϵ=1e-2::Float64,
         tol=1e-8::Float64
@@ -28,7 +28,7 @@ function update_barycenters(
     Ts_collection = map(update_transport_updated, Cs_collection)
 
     # compute C barycenter
-    return compute_C(λs_collection, Ts_collection, Cs_collection, p, loss)
+    return compute_C(λs_collection, map(x-> x.T, Ts_collection), Cs_collection, C.μ, loss)
 end
 
 function update_transport(
@@ -45,7 +45,7 @@ function update_transport(
     # define stop sk tolerance
     SK_initial_point = OM.data_SK(K, Cp.μ, Cs.μ, T)
     SK_repeater = OM.RepeatUntilConvergence{OM.data_SK}(OM.update_SK, OM.stop_SK_T)
-    _, T = execute!(SK_repeater, SK_initial_point)
+    T, _ = OM.execute!(SK_repeater, SK_initial_point)
     return T
 end
 
@@ -78,5 +78,4 @@ function compute_C(
         end
         return OM.MetricMeasureSpace(exp.(sum(Ms_collection)./(p*p')),p)
     end
-
 end
