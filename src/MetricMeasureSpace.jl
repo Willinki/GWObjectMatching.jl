@@ -36,33 +36,24 @@ struct DiscreteProbability <: NormalizedPositiveVector
     end
 end
 
+"""
+inner constructor. It forces the vector to be non-negative and
+to have sum 1.
+"""
 struct ConvexSum <: NormalizedPositiveVector
     v::Vector{Float64}
-    """
-    inner constructor. It forces the vector to be non-negative and
-    to have sum 1.
-    """
     function ConvexSum(D::Vector{Float64})
-
-        any(D .< 0) && throw(ArgumentError(
-            "The entrance of D must be non-negative."
-        ))
-        iszero(D) && throw(ArgumentError(
-            """D can't be the zero vector."""
-        ))
-
+        any(D .< 0) && throw(ArgumentError("The entrance of D must be non-negative."))
+        iszero(D) && throw(ArgumentError("""D can't be the zero vector."""))
         if typeof(D) != Vector{Float64}
             D = convert(Vector{Float64}, D)
         end
-
-        if sum(D) != 1
+        if sum(D) ≈ 1
             D .= (1/sum(D)).*D
             @info "We're changing D in such a way it has sum 1."
         end
-
         return new(D)
     end
-
 end
 
 struct MetricMeasureSpace
@@ -78,7 +69,6 @@ struct MetricMeasureSpace
     - mu cannot be 
     - We force mu to sum at 1, a warning is raised in that case
     """
-
     function MetricMeasureSpace(
             C::Matrix{<:Real},
             μ=fill(1/size(C,1), size(C,1))::Vector{Float64}
@@ -91,26 +81,9 @@ struct MetricMeasureSpace
         ))
 
         prob = DiscreteProbability(μ)
-        #any(μ .< 0) && throw(ArgumentError(
-        #    "The entrance of mu must be non-negative."
-        #))
-        #iszero(μ) && throw(ArgumentError(
-        #    """mu can't be the zero vector, for the uniform distribution
-        #    just use MMS with μ as default"""
-        #))
-
-        #if typeof(μ) != Vector{Float64}
-        #    μ = convert(Vector{Float64}, μ)
-        #end
         if typeof(C) != Matrix{Float64}
             C = convert(Matrix{Float64}, C)
         end
-
-        #if sum(μ) != 1
-        #    μ .= (1/sum(μ)).*μ
-        #    @info "We're changing mu in such a way it has sum 1."
-        #end
-
         return new(C,prob.D)
     end #innerconstructor
 end #struct
