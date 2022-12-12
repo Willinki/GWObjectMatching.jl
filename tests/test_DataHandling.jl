@@ -7,9 +7,9 @@ using Plots
 # FIXTURES
 N::Int64 = 500
 parameters = Dict([(:maxiter, 2000), (:tol,1e-2)])
-img_path::String = "../src/data/shapes/heart.png"
-img_path_gif::String = "../src/data/shapes/apple0.gif"
-img_path_png::String = "../src/data/shapes/annulus.png"
+img_path::String = joinpath(OM.HOME_DIR, "data", "shapes", "heart.png")
+img_path_gif::String = joinpath(OM.HOME_DIR, "data", "shapes", "apple0.gif")
+img_path_png::String = joinpath(OM.HOME_DIR, "data", "shapes", "annulus.png")
 
 function point_reconstruction(points::Matrix{Float64}; kwargs...)
     C::Matrix{Float64} = pairwise(euclidean, eachrow(points); symmetric=true)
