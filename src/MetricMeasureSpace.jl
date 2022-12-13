@@ -101,7 +101,7 @@ function MetricMeasureSpace(
         μ=fill(1/size(v), size(v))::Vector{Float64}
     )
     isconcretetype(eltype(v)) && @warn "Vector dist is not homogeneous."
-    return MetricMeasureSpace(distance_matrix(dist, v), DiscreteProbability(μ).D)
+    return MetricMeasureSpace(distance_matrix(dist, v), μ)
 end
 
 distance_matrix(dist::Function, v::Matrix{Float64}) = [dist(x,y) for x in eachrow(v), y in eachrow(v)] 
@@ -117,5 +117,5 @@ function MetricMeasureSpace(
         μ=fill(1/size(v), size(v)::Vector{Float64}
         )
     )
-    return MetricMeasureSpace(distance_matrix(dist, v), DiscreteProbability(μ).D)
+    return MetricMeasureSpace(distance_matrix(dist, v), μ)
 end
