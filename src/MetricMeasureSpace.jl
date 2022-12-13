@@ -90,7 +90,6 @@ end #struct
 
 distance_matrix(dist::Function, v::Vector) = [dist(x,y) for x in v, y in v] 
 distance_matrix(dist::PreMetric, v::Vector) = pairwise(dist, v) 
-
 """
 External constructor. Given an array and dissimilarity function between its
 elements calculates the distance matrix and constructs MetricMeasureSpace.
@@ -99,9 +98,24 @@ We chose isconcretetype to allow for strings arrays.
 function MetricMeasureSpace(
         dist::Union{Function, PreMetric},
         v::Vector,
+        μ=fill(1/size(v), size(v))::Vector{Float64}
+    )
+    isconcretetype(eltype(v)) && @warn "Vector dist is not homogeneous."
+    return MetricMeasureSpace(distance_matrix(dist, v), DiscreteProbability(μ).D)
+end
+
+distance_matrix(dist::Function, v::Matrix{Float64}) = [dist(x,y) for x in eachrow(v), y in eachrow(v)] 
+distance_matrix(dist::PreMetric, v::Matrix{Float64}) = pairwise(dist, eachrow(v)) 
+"""
+External constructor. Given a matrix of points and dissimilarity function between its
+elements calculates the distance matrix and constructs MetricMeasureSpace.
+We chose isconcretetype to allow for strings arrays. 
+"""
+function MetricMeasureSpace(
+        dist::Union{Function, PreMetric},
+        v::Matrix{Float64},
         μ=fill(1/size(v), size(v)::Vector{Float64}
         )
     )
-    isconcretetype(eltype(v)) && @warn "Vector dist is not homogeneous."
     return MetricMeasureSpace(distance_matrix(dist, v), DiscreteProbability(μ).D)
 end
