@@ -5,9 +5,9 @@ import ObjectMatching as OM
 using PartialFunctions
 
 function update_barycenters(
-        Cs_collection::Vector{OM.MetricMeasureSpace},
+        Cs_collection::Vector{OM.MetricMeasureSpace}, 
         λs_collection::OM.ConvexSum,
-        p::Vector{Float64},
+        p::Vector{Float64};
         loss=OM.loss("L2")::OM.loss,
         ϵ=1e-2::Float64,
         tol=1e-8::Float64
@@ -18,25 +18,26 @@ function update_barycenters(
     ))
 
     #WLOG we can assume that p.>0, if it is not we discard its zero elements
-    p = filter!(e->e!=0, p)
+    p = filter!(e->e!=0, p) 
 
     # initialize C uniform
     C = OM.MetricMeasureSpace(ones(Float64, length(p), length(p)), p)
+
 
     # obtain optimal transport
     update_transport_updated = update_transport $ (Cp=C, loss=loss, ϵ=ϵ, tol=tol)
     Ts_collection = map(update_transport_updated, Cs_collection)
 
     # compute C barycenter
-    return compute_C(λs_collection, map(x-> x.T, Ts_collection), Cs_collection, C.μ, loss)
+    return compute_C(λs_collection, map(x->convert(Matrix{Float64},(x.T)'), Ts_collection), Cs_collection, p, loss)
 end
 
 function update_transport(
         Cs::OM.MetricMeasureSpace;
         Cp::OM.MetricMeasureSpace,
         loss::OM.loss,
-        ϵ::Float64,
-        tol::Float64,
+        ϵ::Float64,    #stop_SK_T
+        tol::Float64,  #stop_SK_ab
     )
     Np, Ns = (length(Cp.μ), length(Cs.μ))
     T = ones(Np, Ns)./(Np*Ns)
@@ -45,7 +46,7 @@ function update_transport(
     # define stop sk tolerance
     SK_initial_point = OM.data_SK(K, Cp.μ, Cs.μ, T)
     SK_repeater = OM.RepeatUntilConvergence{OM.data_SK}(OM.update_SK, OM.stop_SK_T)
-    T, _ = OM.execute!(SK_repeater, SK_initial_point)
+    T ,_ = execute!(SK_repeater, SK_initial_point)
     return T
 end
 
@@ -55,7 +56,7 @@ function compute_C(
         Cs_collection::Vector{OM.MetricMeasureSpace},
         p::Vector{Float64},
         loss::OM.loss
-    )
+    )::OM.MetricMeasureSpace
     S = length(λs_collection.v)
     Ms_collection = fill(zeros(length(p),length(p)), S)
     # TODO: improve syntax
@@ -65,6 +66,7 @@ function compute_C(
                 (Ts_collection[i]')*((Cs_collection[i].C)*(Ts_collection[i]))
                 )         
         end
+        println("S = $S")
         return OM.MetricMeasureSpace((sum(Ms_collection)./(p*p')),p)
     else #if loss.string == "KL"
         for i = 1:S
@@ -76,6 +78,8 @@ function compute_C(
                 (Ts_collection[i]')*(log.(Cs_collection[i].C)*(Ts_collection[i]))
                 ) 
         end
+        println("S = $S")
         return OM.MetricMeasureSpace(exp.(sum(Ms_collection)./(p*p')),p)
     end
+
 end
