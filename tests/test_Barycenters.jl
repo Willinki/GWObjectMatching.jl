@@ -37,7 +37,7 @@ using LinearAlgebra
 
     function p_is_strictly_positive(MMS::MetricMeasureSpace)
         mu_mms = MMS.μ
-        return mu_mms[1]>0
+        return all(mu_mms.>0)
     end
 
     @test p_is_strictly_positive(
