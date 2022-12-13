@@ -20,6 +20,14 @@ import ObjectMatching: MetricMeasureSpace, DiscreteProbability, NormalizedPositi
     end
     @test mu_is_constant_when_default(C)
 
+    function mu_is_constant_using_outer_constructor(M::MetricMeasureSpace)
+        mu_mms = M.μ
+        return all(mu_mms .== mu_mms[1])
+    end
+    @test mu_is_constant_using_outer_constructor(MetricMeasureSpace((x,y)->abs(x-y), rand(4)))
+    @test mu_is_constant_using_outer_constructor(MetricMeasureSpace((x,y)->abs(x-y), rand(4,2)))
+
+
     # raise error when C and mu have different dimensions 
     @test_throws ArgumentError MetricMeasureSpace(C, Float64[1, 1, 1])
 
