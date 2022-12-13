@@ -97,7 +97,7 @@ end
 keeps only n elements in v 
 """
 function undersample(v::Matrix{Float64}, n::Int64)
-    0 < n < size(v, 1) || throw(ArgumentError(
+    1 < n < size(v, 1) || throw(ArgumentError(
         "Provide a valid fraction or number for downsampling"
     ))
     return v[rand(1:size(v, 1), n), :]
