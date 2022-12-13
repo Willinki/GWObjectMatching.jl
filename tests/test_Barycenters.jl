@@ -1,5 +1,5 @@
 import Test: @test, @test_throws, @testset
-import ObjectMatching: compute_C, loss, update_barycenters, GW_Cost
+import ObjectMatching: compute_C, loss, update_barycenters, GW_Cost, initialize_C
 import ObjectMatching: MetricMeasureSpace, DiscreteProbability, ConvexSum, NormalizedPositiveVector
 using LinearAlgebra
 
@@ -41,7 +41,7 @@ using LinearAlgebra
     end
 
     @test p_is_strictly_positive(
-        update_barycenters(Cs_collection, λs_collection, [0.0, 1.0, 0.0, 2.0])
+        update_barycenters(initialize_C([0.0, 1.0, 0.0, 2.0]),Cs_collection, λs_collection)
         )
 
 end  
