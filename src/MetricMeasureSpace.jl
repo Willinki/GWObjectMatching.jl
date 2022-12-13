@@ -97,15 +97,15 @@ We chose isconcretetype to allow for strings arrays.
 """
 function MetricMeasureSpace(
         dist::Union{Function, PreMetric},
-        v::Vector,
-        μ=fill(1/size(v), size(v))::Vector{Float64}
+        v::Vector;
+        μ=fill(1/size(v,1), size(v,1))::Vector{Float64}
     )
-    isconcretetype(eltype(v)) && @warn "Vector dist is not homogeneous."
+    isconcretetype(eltype(v)) || @warn "Vector dist is not homogeneous."
     return MetricMeasureSpace(distance_matrix(dist, v), μ)
 end
 
 distance_matrix(dist::Function, v::Matrix{Float64}) = [dist(x,y) for x in eachrow(v), y in eachrow(v)] 
-distance_matrix(dist::PreMetric, v::Matrix{Float64}) = pairwise(dist, eachrow(v)) 
+distance_matrix(dist::PreMetric, v::Matrix{Float64}) = pairwise(dist, v, dims=1) 
 """
 External constructor. Given a matrix of points and dissimilarity function between its
 elements calculates the distance matrix and constructs MetricMeasureSpace.
@@ -113,9 +113,8 @@ We chose isconcretetype to allow for strings arrays.
 """
 function MetricMeasureSpace(
         dist::Union{Function, PreMetric},
-        v::Matrix{Float64},
-        μ=fill(1/size(v), size(v)::Vector{Float64}
-        )
+        v::Matrix{Float64};
+        μ=fill(1/size(v, 1), size(v, 1))::Vector{Float64}
     )
     return MetricMeasureSpace(distance_matrix(dist, v), μ)
 end

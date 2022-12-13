@@ -1,4 +1,5 @@
 import Test: @test, @test_throws, @testset
+import Distances: euclidean
 import ObjectMatching: MetricMeasureSpace, DiscreteProbability, NormalizedPositiveVector
 
 
@@ -20,13 +21,21 @@ import ObjectMatching: MetricMeasureSpace, DiscreteProbability, NormalizedPositi
     end
     @test mu_is_constant_when_default(C)
 
-    function mu_is_constant_using_outer_constructor(M::MetricMeasureSpace)
-        mu_mms = M.μ
+    function mu_is_constant_using_outer_constructor_vec(dist)
+        randM = MetricMeasureSpace(dist, rand(5))
+        mu_mms = randM.μ
         return all(mu_mms .== mu_mms[1])
     end
-    @test mu_is_constant_using_outer_constructor(MetricMeasureSpace((x,y)->abs(x-y), rand(4)))
-    @test mu_is_constant_using_outer_constructor(MetricMeasureSpace((x,y)->abs(x-y), rand(4,2)))
+    @test mu_is_constant_using_outer_constructor_vec(euclidean)
+    @test mu_is_constant_using_outer_constructor_vec((x, y) -> abs(x-y))
 
+    function mu_is_constant_using_outer_constructor_mat(dist)
+        randM = MetricMeasureSpace(dist, rand(5, 2))
+        mu_mms = randM.μ
+        return all(mu_mms .== mu_mms[1])
+    end
+    @test mu_is_constant_using_outer_constructor_mat(euclidean)
+    @test mu_is_constant_using_outer_constructor_mat((x, y) -> sum(x-y))
 
     # raise error when C and mu have different dimensions 
     @test_throws ArgumentError MetricMeasureSpace(C, Float64[1, 1, 1])
