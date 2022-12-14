@@ -79,7 +79,7 @@ end
 Second proposal for stopping criterion, stops whenever a and b are close
 enough to p and q.
 """
-function stop_SK_ab(history::Vector{data_SK}; ϵ=10^(-6)::Float64)::Bool
+function stop_SK_ab(history::Vector{data_SK}; ϵ=1e-6::Float64)::Bool
     m = max(
         norm(history[end].a - history[end].p,1) ,
         norm(history[end].b - history[end].q,1)  
@@ -88,10 +88,6 @@ function stop_SK_ab(history::Vector{data_SK}; ϵ=10^(-6)::Float64)::Bool
     return a
 end
 
-#TODO: make possible to use it as field "has_converged" in RepeatUntilConvergence
-# i.e. understand why it doesn't return a Bool type
-
-function stop_SK(history::Vector{data_SK}; ϵ=10^(-2)::Float64)::Bool
-    a = (stop_SK_T(history,ϵ) && stop_SK_ab(history,ϵ))
-    return a
+function stop_SK(history::Vector{data_SK}; ϵ=1e-6::Float64)::Bool
+    return stop_SK_T(history,ϵ) && stop_SK_ab(history,ϵ)
 end
