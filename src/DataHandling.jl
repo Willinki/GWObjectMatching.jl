@@ -1,10 +1,10 @@
 import FileIO: load
-import ColorTypes: RGBA, RGB
+import ColorTypes: RGBA, RGB, Gray
 import Images: N0f8
 import MultivariateStats: MetricMDS, fit, predict, isotonic
 using LinearAlgebra
 
-Imagetype::Type = Union{Matrix{RGBA{N0f8}}, Matrix{RGB{N0f8}}}
+Imagetype::Type = Union{Matrix{RGBA{N0f8}}, Matrix{RGB{N0f8}}, Matrix{Gray{N0f8}}}
 
 """
 Main function:
@@ -17,7 +17,7 @@ Returns:
 - Vector{Vector{Float64, n=2}}
 # TODO: set better path handling
 """
-function load_image(filename::String ; n::Union{Int64, Float64}=1e1)::Matrix{Float64}
+function load_image(filename::String ; n::Union{Int64, Float64}=1.)::Matrix{Float64}
     points = (
         load(filename) |> normalize_image |> get_coord_black_points
         |> rescale_convert_to_float |> randomRotate_points
@@ -47,6 +47,14 @@ function normalize_image(img::Imagetype)::Matrix{Bool}
         return (pix.r + pix.g + pix.b) ≈ 0
     end
 
+    """
+    this is for grayscale images
+    we return true if have gray >0.5 (white)
+    """
+    function normalize_pixel(pix::Gray{N0f8})::Bool
+        return pix.val > 0.5
+    end
+
     return map(normalize_pixel, img)::Matrix{Bool}
 end
 
@@ -71,19 +79,19 @@ function rescale_convert_to_float(coords::Matrix{Int64})::Matrix{Float64}
 end
 
 """
-random rotation of points
-"""
-function randomRotate_points(coords::Matrix{Float64})
-    R = PlaneRotation(rand(Float64)*2*π)
-    return mapslices(x->R.action*x, coords, dims=2) 
-end
-
-"""
 simple struct to define SO2 actions
 """
 struct PlaneRotation
     action::Matrix{Float64}
     PlaneRotation(θ::T) where T<:Real = new([cos(θ) -sin(θ); sin(θ) cos(θ)])
+end
+
+"""
+random rotation of points
+"""
+function randomRotate_points(coords::Matrix{Float64})
+    R = PlaneRotation(rand(Float64)*2*π)
+    return mapslices(x->R.action*x, coords, dims=2) 
 end
 
 """

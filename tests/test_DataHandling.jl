@@ -10,6 +10,7 @@ parameters = Dict([(:maxiter, 2000), (:tol,1e-2)])
 img_path::String = joinpath(OM.HOME_DIR, "data", "shapes", "heart.png")
 img_path_gif::String = joinpath(OM.HOME_DIR, "data", "shapes", "apple0.gif")
 img_path_png::String = joinpath(OM.HOME_DIR, "data", "shapes", "annulus.png")
+img_path_gry::String = joinpath(OM.HOME_DIR, "data", "mnist", "5", "img_107.jpg")
 
 function point_reconstruction(points::Matrix{Float64}; kwargs...)
     C::Matrix{Float64} = pairwise(euclidean, eachrow(points); symmetric=true)
@@ -35,6 +36,8 @@ end
     @test OM.load_image(img_path_gif, n=500) isa Any
     @test OM.load_image(img_path_png, n=500) isa Any
     @test OM.load_image(img_path, n=500) isa Any
+    @test OM.load_image(img_path) isa Any
+    @test OM.load_image(img_path_gry) isa Any
     @test size(point_reconstruction(points; parameters...)) == size(points)
     @test_throws ArgumentError OM.undersample(points, 1.1)
     @test_throws ArgumentError OM.undersample(points, -0.1)

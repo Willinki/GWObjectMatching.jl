@@ -75,11 +75,11 @@ using LinearAlgebra
         updated_data_SK = update_transport(Cs;Cp,loss,ϵ,tol)
         Ts = updated_data_SK.T 
         p,q = compute_marginals(updated_data_SK)
-        return (norm(p-Cp.μ,Inf) < 0.001) && (norm(q-Cs.μ,Inf) < 0.001)
+        return (norm(p-Cp.μ, Inf) < 0.01) && (norm(q-Cs.μ, Inf) < 0.01)
     end
 
     @test update_transport_approximates_original_marginals(
-        Q, Cq, loss("L2"),1e-2,1e-8
+        Q, Cq, loss("L2"), 1e-2, 1e-8
     )
 
 end  

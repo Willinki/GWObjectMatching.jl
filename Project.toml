@@ -4,6 +4,7 @@ authors = ["Willinki <d.badalotti@campus.unimib.it>", "alexpinzi <alex.97.pinzi@
 version = "0.1.0"
 
 [deps]
+ArgParse = "c7e460c6-2fb9-53a9-8c5b-16f535851c63"
 ColorTypes = "3da002f7-5984-5a60-b8a6-cbb66c0b333f"
 DataStructures = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
 Distances = "b4f34e82-e78d-54a5-968a-f98e89d6e8f7"
