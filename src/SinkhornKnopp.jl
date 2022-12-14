@@ -85,8 +85,11 @@ function stop_SK_ab(history::Vector{data_SK}; ϵ=10^(-6)::Float64)::Bool
         norm(history[end].b - history[end].q,1)  
     )
     a = (m<ϵ) 
-    return false
+    return a
 end
+
+#TODO: make possible to use it as field "has_converged" in RepeatUntilConvergence
+# i.e. understand why it doesn't return a Bool type
 
 function stop_SK(history::Vector{data_SK}; ϵ=10^(-2)::Float64)::Bool
     a = (stop_SK_T(history,ϵ) && stop_SK_ab(history,ϵ))
