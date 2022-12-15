@@ -45,7 +45,7 @@ function update_transport(
 
     # define stop sk tolerance
     SK_initial_point = OM.data_SK(K, Cp.μ, Cs.μ, T)
-    SK_repeater = OM.RepeatUntilConvergence{OM.data_SK}(OM.update_SK, OM.stop_SK_T)
+    SK_repeater = OM.RepeatUntilConvergence{OM.data_SK}(OM.update_SK, OM.stop_SK)
     T ,_ = execute!(SK_repeater, SK_initial_point)
     return T
 end

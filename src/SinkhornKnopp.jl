@@ -79,15 +79,16 @@ end
 Second proposal for stopping criterion, stops whenever a and b are close
 enough to p and q.
 """
-function stop_SK_ab(history::Vector{data_SK}; ϵ=1e-6::Float64)::Bool
+function stop_SK_ab(history::Vector{data_SK}; ϵ=1e-8::Float64)::Bool
+    μ,ν = compute_marginals(history[end])
     m = max(
-        norm(history[end].a - history[end].p,1) ,
-        norm(history[end].b - history[end].q,1)  
+        norm(μ - history[end].p,1) ,
+        norm(ν - history[end].q,1)  
     )
     a = (m<ϵ) 
     return a
 end
 
-function stop_SK(history::Vector{data_SK}; ϵ=1e-6::Float64)::Bool
-    return stop_SK_T(history,ϵ) && stop_SK_ab(history,ϵ)
+function stop_SK(history::Vector{data_SK}; ϵ=1e-8::Float64)::Bool
+    return (stop_SK_T(history;ϵ) && stop_SK_ab(history;ϵ))
 end

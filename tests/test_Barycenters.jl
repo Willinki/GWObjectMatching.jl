@@ -5,12 +5,12 @@ using LinearAlgebra
 
 @testset "Compute Barycenters" begin
 
-    M = MetricMeasureSpace(rand(2,2))
-    N = MetricMeasureSpace(rand(4,4))
+    M = MetricMeasureSpace(rand(20,20))
+    N = MetricMeasureSpace(rand(40,40))
     Cs_collection = [M,N]
     λs_collection = ConvexSum([0.4,0.6])
-    Ts_collection = [rand(2,3),rand(4,3)]
-    p = [0.2,0.4,0.4]
+    Ts_collection = [rand(20,30),rand(40,30)]
+    p = rand(30)
     Cp = initialize_C(p)
     Cp_updated = update_barycenters(Cp,Cs_collection,λs_collection)
 
@@ -75,11 +75,10 @@ using LinearAlgebra
         updated_data_SK = update_transport(Cs;Cp,loss,ϵ,tol)
         Ts = updated_data_SK.T 
         p,q = compute_marginals(updated_data_SK)
-        return (norm(p-Cp.μ, Inf) < 0.01) && (norm(q-Cs.μ, Inf) < 0.01)
+        return (norm(p-Cp.μ, Inf) < 1e-8) && (norm(q-Cs.μ, Inf) < 1e-8)
     end
 
     @test update_transport_approximates_original_marginals(
         Q, Cq, loss("L2"), 1e-2, 1e-8
     )
-
 end  
