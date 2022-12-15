@@ -19,13 +19,13 @@ Returns a boolean value, if True, the loop is stopped.
 abstract type BaseRepeatUntilConvergence{T} end
 
 mutable struct RepeatUntilConvergence{T} <: BaseRepeatUntilConvergence{T}
-    update_func::Function
+    update_func::S where S<:Function
     has_converged::Function
     history::CircularBuffer{T}
     init_vals::T
 
     function RepeatUntilConvergence{T}(
-        update_func::Function,
+        update_func::S where S<:Function,
         has_converged::Function;
         memory_size=2::Int64
         ) where T
@@ -47,7 +47,7 @@ mutable struct RepeatUntilConvergence{T} <: BaseRepeatUntilConvergence{T}
 end
 
 mutable struct LargeMemoryRepeatUntilConvergence{T} <: BaseRepeatUntilConvergence{T}
-    update_func::Function
+    update_func::S where S<:Function
     has_converged::Function
     history::Vector{T}
     init_vals::T
