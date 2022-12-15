@@ -52,8 +52,8 @@ function update_SK(elem::data_SK)::data_SK
 end
 
 #TODO: write it better
-function compute_marginals(elem::data_SK)
-    T = elem.T
+function compute_marginals(Ts::data_SK)
+    T = Ts.T
     i,j = size(T)
     p = zeros(Float64, i)
     q = zeros(Float64, j)
@@ -71,7 +71,6 @@ First proposal for stopping criterion, stops whenever transport is stable
 """
 function stop_SK_T(history::Vector{data_SK}; ϵ=1e-8::Float64)::Bool
     length(history) == 1 && return false
-    a = norm(history[end].T - history[end-1].T, 1)
     return norm(history[end].T - history[end-1].T, 1)::Float64 < ϵ
 end
 

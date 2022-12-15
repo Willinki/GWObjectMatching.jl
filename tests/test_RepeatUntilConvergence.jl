@@ -60,4 +60,3 @@ import ObjectMatching: RepeatUntilConvergence, execute!
     end
     @test test_works_if_stop_function_has_default_args() < 0.0001
 end
-

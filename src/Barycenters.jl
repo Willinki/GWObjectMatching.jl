@@ -4,6 +4,50 @@
 import ObjectMatching as OM
 using PartialFunctions
 
+function GW_barycenters(n::Int64,
+        Cs_collection::Vector{OM.MetricMeasureSpace}, 
+        λs_collection::OM.ConvexSum,
+        p=fill(1/n,n)::Vector{Float64},
+        loss=OM.loss("L2")::OM.loss,
+        ϵ=1e-2::Float64,
+        tol=1e-8::Float64,
+        niter=20::Int64
+    )::OM.MetricMeasureSpace
+    length(p)==n || throw(ArgumentError("n must be equal to the length of p.")) 
+
+    Cp_initial = initialize_C(p)
+
+    function update_barycenters_updated(
+            Cp::MetricMeasureSpace
+        )::MetricMeasureSpace
+        return update_barycenters(Cp; Cs_collection,λs_collection, loss, ϵ, tol)
+    end
+
+    function stop_bar_niter(history::Vector{OM.MetricMeasureSpace})
+        return length(history)>=niter
+    end
+
+    #convert(Function, update_barycenters_updated)
+
+    #update_barycenters_updated = update_barycenters $ (
+    #    Cs_collection=Cs_collection, λs_collection=λs_collection, 
+    #    loss=loss, ϵ=ϵ, tol=tol
+    #)
+    update_barycenters_repeater=OM.RepeatUntilConvergence{OM.MetricMeasureSpace}(
+        update_barycenters_updated, stop_bar_niter; memory_size=niter
+    )
+    Cp_final , _ = execute!(update_barycenters_repeater, Cp_initial)
+    return Cp_final
+end
+
+#function stop_bar_update(history::Vector{OM.MetricMeasureSpace},ϵ=1e-8::Float64)
+#    length(history) == 1 && return false
+#    return norm(history[end].C - history[end-1].C, 1)::Float64 < ϵ
+#end
+
+
+
+
 function initialize_C(p::Vector{Float64})
     #WLOG we can assume that p.>0, if it is not we discard its zero elements
     p = filter!(e->e!=0, p) 
@@ -12,12 +56,12 @@ function initialize_C(p::Vector{Float64})
 end
 
 
-function update_barycenters(Cp::OM.MetricMeasureSpace,
+function update_barycenters(Cp::OM.MetricMeasureSpace;
         Cs_collection::Vector{OM.MetricMeasureSpace}, 
         λs_collection::OM.ConvexSum,
-        loss=OM.loss("L2")::OM.loss,
-        ϵ=1e-2::Float64,
-        tol=1e-8::Float64
+        loss::OM.loss,      #loss("L2")
+        ϵ::Float64,         #1e-2
+        tol::Float64        #1e-8
     )::OM.MetricMeasureSpace
 
     length(Cs_collection)==length(λs_collection.v) || throw(ArgumentError(
@@ -29,7 +73,10 @@ function update_barycenters(Cp::OM.MetricMeasureSpace,
     Ts_collection = map(update_transport_updated, Cs_collection)
 
     # compute C barycenter
-    return compute_C(λs_collection, map(x->convert(Matrix{Float64},(x.T)'), Ts_collection), Cs_collection, Cp.μ, loss)
+    return compute_C(
+        λs_collection, map(x->convert(Matrix{Float64},(x.T)'), Ts_collection), 
+        Cs_collection, Cp.μ, loss
+    )
 end
 
 function update_transport(
