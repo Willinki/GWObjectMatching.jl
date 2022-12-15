@@ -27,7 +27,7 @@ struct DiscreteProbability <: NormalizedPositiveVector
             D = convert(Vector{Float64}, D)
         end
 
-        if sum(D) != 1
+        if !(sum(D) ≈ 1)
             D .= (1/sum(D)).*D
             @info "We're changing mu in such a way it has sum 1."
         end
@@ -48,7 +48,7 @@ struct ConvexSum <: NormalizedPositiveVector
         if typeof(D) != Vector{Float64}
             D = convert(Vector{Float64}, D)
         end
-        if sum(D) != 1
+        if !(sum(D) ≈ 1)
             D .= (1/sum(D)).*D
             @info "We're changing D in such a way it has sum 1."
         end
