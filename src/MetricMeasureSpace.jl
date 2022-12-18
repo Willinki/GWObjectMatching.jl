@@ -15,36 +15,31 @@ struct DiscreteProbability <: NormalizedPositiveVector
     to have sum 1.
     """
     function DiscreteProbability(D::Vector{Float64})
-
         any(D .< 0) && throw(ArgumentError(
             "The entrance of D must be non-negative."
         ))
         iszero(D) && throw(ArgumentError(
             """D can't be the zero vector."""
         ))
-
         if typeof(D) != Vector{Float64}
             D = convert(Vector{Float64}, D)
         end
-
         if !(sum(D) ≈ 1)
             D .= (1/sum(D)).*D
             @info "We're changing mu in such a way it has sum 1."
         end
-
         return new(D)  
     end
 end
 
-"""
-inner constructor. It forces the vector to be non-negative and
-to have sum 1.
-"""
 struct ConvexSum <: NormalizedPositiveVector
     v::Vector{Float64}
+    """
+    inner constructor. Non negative and cannot be equal to zero
+    """
     function ConvexSum(D::Vector{Float64})
         any(D .< 0) && throw(ArgumentError("The entrance of D must be non-negative."))
-        iszero(D) && throw(ArgumentError("""D can't be the zero vector."""))
+        iszero(D)   && throw(ArgumentError("""D can't be the zero vector."""))
         if typeof(D) != Vector{Float64}
             D = convert(Vector{Float64}, D)
         end
@@ -56,10 +51,14 @@ struct ConvexSum <: NormalizedPositiveVector
     end
 end
 
+"""
+outer constructor. From int constructs a uniform ConvexSum of specified length
+"""
+ConvexSum(dim::Int64) = ConvexSum(fill(1/dim, dim))
+
 struct MetricMeasureSpace
     C::Matrix{Float64}
     μ::Vector{Float64}
-
     """
     inner constructor. It forces the following behavior
     - typeof C must be Matrix{Float64}

@@ -117,7 +117,7 @@ PCA to reconstruct images
 function reconstruct_points(distance_matrix::Matrix{Float64}; kwargs...)
     mds = fit(
         MetricMDS, distance_matrix;
-        distances=true, maxoutdim=2, 
+        distances=true, maxoutdim=2,
         kwargs...
     )
     return predict(mds)'

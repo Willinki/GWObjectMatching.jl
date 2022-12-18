@@ -34,15 +34,12 @@ using LinearAlgebra
         MMS = compute_C(λs_collection, Ts_collection, Cs_collection, p, lossL2)
         return size(MMS.C,1) == size(MMS.C,2)
     end
-
     @test compute_C_returns_square_matrix(
         Cs_collection, λs_collection, Ts_collection, p, lossL2
         ) 
-
     @test compute_C_returns_square_matrix(
         Cs_collection, λs_collection, Ts_collection, p, lossL2
         )
-
     @test_throws ArgumentError compute_C(
         λs_collection,Ts_collection,[MetricMeasureSpace([-1 1; 1 0]),N],p, lossKL
         )
@@ -51,7 +48,6 @@ using LinearAlgebra
         mu_mms = MMS.μ
         return all(mu_mms.>0)
     end
-
     @test p_is_strictly_positive(
             update_barycenters(
                 initialize_C([0.0, 1.0, 0.0, 2.0]);
@@ -63,37 +59,38 @@ using LinearAlgebra
     @test all((Cp.C).== Cp.C[1])
 
     #update_barycenters can be iterated
-    @test typeof(
+    @test MetricMeasureSpace == typeof(
         update_barycenters(Cp_updated;Cs_collection,λs_collection,loss=lossL2,ϵ,tol)
-    ) == MetricMeasureSpace
-    @test typeof(
+    ) 
+    @test MetricMeasureSpace == typeof(
         update_barycenters(Cp_updated;Cs_collection,λs_collection,loss=lossKL,ϵ,tol)
-    ) == MetricMeasureSpace
+    ) 
 
-    #update_transport has the correct size
     function update_transport_has_the_correct_size(
-        Cs::MetricMeasureSpace, Cp::MetricMeasureSpace, loss::loss, ϵ, tol
-    )
+            Cs::MetricMeasureSpace,
+            Cp::MetricMeasureSpace,
+            loss::loss,
+            ϵ, tol
+        )
         Ts = update_transport(Cs;Cp,loss,ϵ,tol).T
         return length(Cp.μ) == size(Ts,1) && length(Cs.μ) == size(Ts,2)
     end
-
     @test update_transport_has_the_correct_size(M, Cp, lossL2,1e-2,1e-8)
 
     function update_transport_approximates_original_marginals(
-        Cs::MetricMeasureSpace, Cp::MetricMeasureSpace, loss::loss, ϵ, tol
-    )
+            Cs::MetricMeasureSpace,
+            Cp::MetricMeasureSpace,
+            loss::loss,
+            ϵ, tol
+        )
         updated_data_SK = update_transport(Cs;Cp,loss,ϵ,tol)
         Ts = updated_data_SK.T 
         p1,q1 = compute_marginals(updated_data_SK)
         return (norm(p1-Cp.μ, Inf) < 1e-8) && (norm(q1-Cs.μ, Inf) < 1e-8)
     end
-
     @test update_transport_approximates_original_marginals(
         Q, Cq, lossL2, 1e-2, 1e-8
     )
-
-    @test typeof(GW_barycenters(30, Cs_collection,λs_collection))==MetricMeasureSpace
 
     function GW_barycenters_has_the_correct_size(
         n::Int64, 
@@ -108,13 +105,12 @@ using LinearAlgebra
         Cp = GW_barycenters(n,Cs_collection,λs_collection,p,loss,ϵ,tol,niter).C
         return (size(Cp,1) == size(Cp,2) && size(Cp,1) == n)
     end
+    @test typeof(GW_barycenters(30, Cs_collection, λs_collection)) == MetricMeasureSpace
+    @test GW_barycenters_has_the_correct_size(30, Cs_collection, λs_collection)
+    @test GW_barycenters_has_the_correct_size(30, Cs_collection, λs_collection, p, lossKL)
+    @test_throws ArgumentError GW_barycenters(50, Cs_collection, λs_collection, p)
 
-    @test GW_barycenters_has_the_correct_size(30,Cs_collection,λs_collection)
-    @test GW_barycenters_has_the_correct_size(30,Cs_collection,λs_collection,p,lossKL)
-
-    @test_throws ArgumentError GW_barycenters(50,Cs_collection,λs_collection,p)
-
-    function GW_barycenters_has_the_correct_probability_measure(
+    function GW_baryc_has_the_correct_prob_measure(
         n::Int64, 
         Cs_collection::Vector{MetricMeasureSpace}, 
         λs_collection::ConvexSum,
@@ -127,10 +123,7 @@ using LinearAlgebra
         Cp = GW_barycenters(n,Cs_collection,λs_collection,p,loss,ϵ,tol,niter)
         return (Cp.μ == DiscreteProbability(p).D)
     end
-
-    @test GW_barycenters_has_the_correct_probability_measure(30,Cs_collection,λs_collection,rand(30))
-    @test GW_barycenters_has_the_correct_probability_measure(30,Cs_collection,λs_collection,p,lossKL)
-
-    @test typeof(GW_barycenters(1000, Cs_collection,λs_collection))==MetricMeasureSpace
-
+    @test GW_baryc_has_the_correct_prob_measure(30,Cs_collection,λs_collection,rand(30))
+    @test GW_baryc_has_the_correct_prob_measure(30,Cs_collection,λs_collection,p,lossKL)
+    @test typeof(GW_barycenters(1000, Cs_collection, λs_collection))==MetricMeasureSpace
 end  
