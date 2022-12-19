@@ -35,8 +35,10 @@ end #struct
 
 function GW_Cost(L::loss, M::MetricMeasureSpace, N::MetricMeasureSpace, T::Matrix{Float64}, ϵ::Float64)
     """
-    This function evaluate the tensor product mathcal{L}(M.C,N.C) tensor T, using the decomposition of a loss function in f1,f2,h1,h2.
-    About T: all the operation makes sense if T is any matrix of the correct size, but to make sense T must be a transport plan between
+    This function evaluate the tensor product mathcal{L}(M.C,N.C) tensor T,
+    using the decomposition of a loss function in f1,f2,h1,h2.
+    About T: all the operation makes sense if T is any matrix of the correct size,
+    but to make sense T must be a transport plan between
     M.μ and N.μ.
     """
     if (size(M.C,1) != size(T,1)) || (size(N.C,1) != size(T,2))
@@ -44,11 +46,12 @@ function GW_Cost(L::loss, M::MetricMeasureSpace, N::MetricMeasureSpace, T::Matri
     end
 
     E = zeros(size(T,1),size(T,2))
-
     E = (M.C)*T*(N.C)
-
-    E = ((L.f1).(M.C))*((M.μ)*(ones(size(T,2)))') + ones(size(T,1))*((N.μ)'*((L.f2).(N.C))') - ((L.h1).(M.C))*T*((L.h2).(N.C))' 
-
+    E = (
+        ((L.f1).(M.C))*((M.μ)*(ones(size(T,2)))')
+        + ones(size(T,1))*((N.μ)'*((L.f2).(N.C))')
+        - ((L.h1).(M.C))*T*((L.h2).(N.C))' 
+    )
     E .= exp.(-E./ϵ)
 
     return E

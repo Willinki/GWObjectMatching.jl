@@ -21,23 +21,19 @@ struct data_SK
             q::Vector{Float64},
             T::Matrix{Float64}
         )
-
         (size(T,1) == size(K,1) && size(T,2) == size(K,2)) || throw(ArgumentError(
             "The size of T and K doesn't match."
         ))
-
         size(T,1) == length(p) || throw(ArgumentError(
             "The number of rows of T must be the same of the length of p."
         ))
-
         size(T,2) == length(q) || throw(ArgumentError(
             "The number of columns of T must be the same of the length of q."
         ))
-        
+        # the paper initializes to a vector of ones, don't know if we should change
         a = 1/(length(p))*ones(length(p))
         b = q./((K')*a)
         return new(K, p, q, T, a, b)
-        
     end
 end
 
