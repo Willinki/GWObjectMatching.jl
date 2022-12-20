@@ -2,9 +2,7 @@
 
 This document serves to have an idea of the theory behind the project and why certain algorithms have been developed. 
 
-The project is mainly based on two papers: 
-    1) "Gromov-Wasserstein Averaging of Kernel and Distance Matrices", by G. Peyré, M. Cuturi and J. Solomon
-    2) "Gromov-Wasserstein Learning for Graph Matching and Node Embedding", by H. Xu, D. Luo, H. Zha and L. Carin.
+The project is mainly based on the paper "Gromov-Wasserstein Averaging of Kernel and Distance Matrices", by G. Peyré, M. Cuturi and J. Solomon.
 
 ** Gromov-Wasserstein Averaging of Kernel and Distance Matrices
 
@@ -77,6 +75,10 @@ This is the problem on which we are concentrating, writing in Julia the algorith
 [I'm referring to Algorithm 1.]
 
 
+
+
+
+
 ** Gromov-Wasserstein Learning for Graph Matching and Node Embedding
 
 The paper by Cuturi, Peyré and Solomon had some limitations in the way it's defined the discrepancy of two graphs: given two metric
@@ -101,5 +103,5 @@ where $C(X) = (1-\alpha)C + \alpha K(X,X)$ and $K(X,X)$ is exactly the matrix gi
 telling us how much to care about the embedding. We will see that in the algorithm it will vary in such a way that, in an iterative
 process, at any step we will increment the "importance" that we are giving to the embedding: this will be exactly the idea of obtaining 
 at the same time the two embeddings and a matching $T$ that minimizes their discrepancy.
-  
+ 
 
