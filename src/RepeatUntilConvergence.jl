@@ -84,12 +84,12 @@ Returns the last results and R.
 require an ad hoc thing in certain cases
 """
 function execute!(R::RepeatUntilConvergence, init_vals)
-    R.init_vals = init_vals
+    R.init_vals = deepcopy(init_vals)
     iter_results = R.update_func(R.init_vals)
-    push!(R.history, iter_results)
+    push!(R.history, deepcopy(iter_results))
     while !R.has_converged(convert(Vector, R.history))
        iter_results = R.update_func(iter_results)
-       push!(R.history, iter_results) 
+       push!(R.history, deepcopy(iter_results)) 
     end
     return iter_results, R
 end

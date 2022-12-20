@@ -1,7 +1,7 @@
 import FileIO: load
 import ColorTypes: RGBA, RGB, Gray
 import Images: N0f8
-import MultivariateStats: MetricMDS, fit, predict, isotonic
+import MultivariateStats: MetricMDS, MDS, fit, predict, isotonic
 using LinearAlgebra
 
 Imagetype::Type = Union{Matrix{RGBA{N0f8}}, Matrix{RGB{N0f8}}, Matrix{Gray{N0f8}}}
@@ -105,8 +105,12 @@ end
 keeps only n elements in v 
 """
 function undersample(v::Matrix{Float64}, n::Int64)
+    S = size(v, 1)
     1 < n < size(v, 1) || throw(ArgumentError(
-        "Provide a valid fraction or number for downsampling"
+        """Provide a valid fraction or number for downsampling.
+        We must have a float between 0 and 1 and an int between 1 and 
+        $(S)
+        """
     ))
     return v[rand(1:size(v, 1), n), :]
 end
@@ -116,9 +120,9 @@ PCA to reconstruct images
 """
 function reconstruct_points(distance_matrix::Matrix{Float64}; kwargs...)
     mds = fit(
-        MetricMDS, distance_matrix;
-        distances=true, maxoutdim=2,
-        kwargs...
+        MDS, distance_matrix;
+        distances=true, maxoutdim=2, 
+        #kwargs...
     )
     return predict(mds)'
 end

@@ -48,7 +48,7 @@ function main()
     args::Dict                                = parse_commandline()
     files_paths::Vector{String}               = list_img_paths(args["mnist_number"])
     images_list::Vector{Matrix{Float64}}      = map(OM.load_image, files_paths)
-    n_points::Int64                           = 100 
+    n_points::Int64                           = 120 
     images_MMS::Vector{OM.MetricMeasureSpace} = [
         OM.MetricMeasureSpace(euclidean, image) for image in images_list
     ]

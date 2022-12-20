@@ -8,9 +8,9 @@ function GW_barycenters(
         λs_collection::OM.ConvexSum = OM.ConvexSum(length(Cs_collection)),
         p::Vector{Float64}          = fill(1/n_points,n_points),
         loss::OM.loss               = OM.loss("L2"),
-        ϵ::Float64                  = 1e-2,
+        ϵ::Float64                  = 0.05,
         tol::Float64                = 1e-8,
-        niter::Int64                = 20
+        niter::Int64                = 15
     )::OM.MetricMeasureSpace
 
     length(p)==n_points || throw(ArgumentError("n must be equal to the length of p.")) 
@@ -41,7 +41,12 @@ end
 
 function stop_barycenter_niter(history::Vector{OM.MetricMeasureSpace}, niter=20)
     L = length(history)
-    print("ITERATION: $(L)/$(niter) \r")
+    if L == 1
+        return false
+    end
+    diff_mat = abs.(history[end].C - history[end-1].C)
+    ratio = maximum(diff_mat./history[end].C)
+    print("ITERATION: $(L)/$(niter) - $(ratio)\r")
     flush(stdout)
     return L>=niter
 end
@@ -67,8 +72,8 @@ function update_barycenters(
         update_transport_repeater = OM.RepeatUntilConvergence{Matrix{Float64}}(
             update_transport_set, stop_transport; memory_size=2
         )
-        Ts, _ = execute!(update_transport_repeater, Ts)
-        Ts_collection[s] = Ts
+        Ts_final, _ = execute!(update_transport_repeater, Ts)
+        Ts_collection[s] = Ts_final #checked, this does not cause any bug
     end
     # given the updated barycenter
     return compute_C(
@@ -97,19 +102,20 @@ function update_transport(
     # define stop sk tolerance
     SK_initial_point = OM.data_SK(K, Cp.μ, Cs.μ, Ts)
     SK_repeater = OM.RepeatUntilConvergence{OM.data_SK}(OM.update_SK, OM.stop_SK)
-    final_SK ,_ = execute!(SK_repeater, SK_initial_point)
+    final_SK , _ = execute!(SK_repeater, SK_initial_point)
     return final_SK.T
 end
 
 function stop_transport(
         history::Vector{Matrix{Float64}},
-        ratio_threshold::Float64 = 0.01
+        ratio_threshold::Float64 = 1e-4
     )::Bool
     if length(history) == 1
         return false
     end
     diff_mat = abs.(history[end] - history[end-1])
-    ratio = norm(diff_mat)/norm(history[end])
+    ratio = maximum(diff_mat./history[end])
+    println(ratio)
     return ratio < ratio_threshold
 end
 
@@ -142,5 +148,4 @@ function compute_C(
         end
         return OM.MetricMeasureSpace(exp.(sum(Ms_collection)./(p*p')),p)
     end
-
 end

@@ -52,17 +52,13 @@ compute_marginals(Ts::Matrix{Float64}) = (sum(Ts, dims=2)|> vec, sum(Ts, dims=1)
 """
 First proposal for stopping criterion, stops whenever transport is stable
 """
-function stop_SK_T(history::Vector{data_SK}; ϵ=1e-8::Float64)::Bool
+function stop_SK_T(history::Vector{data_SK}; ϵ=1e-12::Float64)::Bool
     length(history) == 1 && return false
     return norm(history[end].T - history[end-1].T, 1)::Float64 < ϵ
 end
 
-"""
-Second proposal for stopping criterion, stops whenever a and b are close
-enough to p and q.
-"""
-function stop_SK_ab_old(history::Vector{data_SK}; ϵ=1e-8::Float64)::Bool
-    μ,ν = compute_marginals(history[end])
+function stop_SK_ab_old(history::Vector{data_SK}; ϵ=1e-12::Float64)::Bool
+    μ,ν = compute_marginals(history[end].T)
     m = max(
         norm(μ - history[end].p,1) ,
         norm(ν - history[end].q,1)  
@@ -71,7 +67,11 @@ function stop_SK_ab_old(history::Vector{data_SK}; ϵ=1e-8::Float64)::Bool
     return a
 end
 
-function stop_SK_ab_new(history::Vector{data_SK}; ϵ=1e-8::Float64)::Bool
+"""
+Second proposal for stopping criterion, stops whenever a and b are close
+enough to p and q.
+"""
+function stop_SK_ab_new(history::Vector{data_SK}; ϵ=1e-12::Float64)::Bool
     elem = history[end]
     first_check = (elem.a).*(elem.K*elem.b)-elem.p
     second_check = (elem.b).*(((elem.K)')*elem.a)-elem.q
@@ -79,7 +79,7 @@ function stop_SK_ab_new(history::Vector{data_SK}; ϵ=1e-8::Float64)::Bool
     return δ<ϵ
 end
 
-
-function stop_SK(history::Vector{data_SK}; ϵ=1e-8::Float64)::Bool
-    return (stop_SK_T(history;ϵ) && stop_SK_ab_new(history;ϵ))
+function stop_SK(history::Vector{data_SK}; ϵ=1e-12::Float64)::Bool
+    boolvar = (stop_SK_T(history;ϵ) && stop_SK_ab_new(history;ϵ))
+    return boolvar
 end
