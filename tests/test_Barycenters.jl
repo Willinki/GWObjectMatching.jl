@@ -1,5 +1,5 @@
 import Test: @test, @test_throws, @testset
-import ObjectMatching: compute_C, loss, update_barycenters, GW_Cost, initialize_C
+import ObjectMatching: compute_C, loss, update_barycenters, GW_Cost, init_C, init_Ts
 import ObjectMatching: update_transport, compute_marginals, GW_barycenters
 import ObjectMatching: MetricMeasureSpace, DiscreteProbability, ConvexSum, NormalizedPositiveVector
 using LinearAlgebra
@@ -17,7 +17,7 @@ using LinearAlgebra
     tol = 1e-8
     q = rand(30)
     p = (1/sum(q))*q
-    Cp = initialize_C(p)
+    Cp = init_C(p)
     Cp_updated = update_barycenters(
         Cp;Cs_collection,λs_collection,loss=lossL2,ϵ,tol
     )
@@ -50,13 +50,13 @@ using LinearAlgebra
     end
     @test p_is_strictly_positive(
             update_barycenters(
-                initialize_C([0.0, 1.0, 0.0, 2.0]);
+                init_C([0.0, 1.0, 0.0, 2.0]);
                 Cs_collection, λs_collection,loss=lossL2,ϵ,tol
             )
         )
     
-    #initialize_C computes the trivial transport
-    @test all((Cp.C).== Cp.C[1])
+    ##initialize_C computes the trivial transport
+    #@test all((Cp.C).== Cp.C[1])
 
     #update_barycenters can be iterated
     @test MetricMeasureSpace == typeof(
@@ -72,10 +72,10 @@ using LinearAlgebra
             loss::loss,
             ϵ, tol
         )
-        Ts = update_transport(Cs;Cp,loss,ϵ,tol).T
+        Ts = update_transport(init_Ts(Cp, Cs); Cs, Cp, loss, ϵ, tol)
         return length(Cp.μ) == size(Ts,1) && length(Cs.μ) == size(Ts,2)
     end
-    @test update_transport_has_the_correct_size(M, Cp, lossL2,1e-2,1e-8)
+    @test update_transport_has_the_correct_size(M, Cp, lossL2, 1e-2, 1e-8)
 
     function update_transport_approximates_original_marginals(
             Cs::MetricMeasureSpace,
@@ -83,9 +83,9 @@ using LinearAlgebra
             loss::loss,
             ϵ, tol
         )
-        updated_data_SK = update_transport(Cs;Cp,loss,ϵ,tol)
-        Ts = updated_data_SK.T 
-        p1,q1 = compute_marginals(updated_data_SK)
+        Ts = init_Ts(Cp,  Cs)
+        Ts = update_transport(Ts ; Cs, Cp, loss, ϵ, tol)
+        p1,q1 = compute_marginals(Ts)
         return (norm(p1-Cp.μ, Inf) < 1e-8) && (norm(q1-Cs.μ, Inf) < 1e-8)
     end
     @test update_transport_approximates_original_marginals(

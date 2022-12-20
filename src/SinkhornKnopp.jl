@@ -47,20 +47,7 @@ function update_SK(elem::data_SK)::data_SK
     return elem
 end
 
-#TODO: write it better
-function compute_marginals(Ts::data_SK)
-    T = Ts.T
-    i,j = size(T)
-    p = zeros(Float64, i)
-    q = zeros(Float64, j)
-    for k = 1:i
-        p[k] = sum(T[k,:])
-    end
-    for k = 1:j
-        q[k] = sum(T[:,k])
-    end
-    return (p,q)
-end
+compute_marginals(Ts::Matrix{Float64}) = (sum(Ts, dims=2)|> vec, sum(Ts, dims=1)|> vec)
 
 """
 First proposal for stopping criterion, stops whenever transport is stable
@@ -89,7 +76,6 @@ function stop_SK_ab_new(history::Vector{data_SK}; ϵ=1e-8::Float64)::Bool
     first_check = (elem.a).*(elem.K*elem.b)-elem.p
     second_check = (elem.b).*(((elem.K)')*elem.a)-elem.q
     δ = max(norm(first_check,1), norm(second_check,1))
-    println("a = $first_check")
     return δ<ϵ
 end
 
