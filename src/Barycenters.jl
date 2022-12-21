@@ -46,8 +46,7 @@ function stop_barycenter_niter(history::Vector{OM.MetricMeasureSpace}, niter=20)
     end
     diff_mat = abs.(history[end].C - history[end-1].C)
     ratio = maximum(diff_mat./history[end].C)
-    print("ITERATION: $(L)/$(niter) - $(ratio)\r")
-    flush(stdout)
+    print("ITERATION: $(L)/$(niter) - $(ratio)")
     return L>=niter
 end
 
