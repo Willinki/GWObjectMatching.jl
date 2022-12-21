@@ -23,24 +23,71 @@ the new element in the history to check if the stop criterion is satisfied; if i
 ** SinkhornKnopp.jl
 
 The Sinkhorn-Knopp algorithm is an iterative algorithm which computes an (approximate) solution of the following minimum problem: 
-$$\min C \cdot \T + \varpesilon KL(T),$$
+$$\min \; C \cdot \T + \varpesilon KL(T),$$
 where the minimum is taken over all the transport plans between two fixed marginal distributions p and q, $\varepsilon$ is a fixed 
 (small) constant and KL is the Kullback-Leibler divergence.
 
+*** struct data_SK
+
 The struct "data_SK" contains all the necessary to compute a single update of the Sinkhorn-Knopp algorithm.
-    - the matrix K is the element-wise exponentiation of C/epsilon;
-    - p and q are the marginal distribution;
-    - T is a feasible transport plan (at first initialized to be just the tensor product between p and q);
-    - a and b are the vectors that are updated by the Sinkhorn algorithm (at first we initialize a to be a constant vector and then we update b)
-     using the iterative formula
-     $$a = \frac{p}{K*b}, \quad b = \frac{q}{K^T*a}$$
 
-Then, the function "update_SK", given a data of type data_SK, computes the new a and b and it also updates $T = diag(a)*K*diag(b)$.
+#+begin_src julia :results output
+struct data_SK:
+    K::Matrix{Float64} 
+    p::Vector{Float64} 
+    q::Vector{Float64} 
+    T::Matrix{Float64}       
+    a::Vector{Float64}       
+    b::Vector{Float64}
+    inner_constructor(K,p,q,T)   
+end
+#+end_src
 
-We proposed two stop criterions: the first is "stop_SK_T" that check when two following iterations are close to each other; the other checks when 
-the marginal distributions of the transport obtained by the last iteration are close to the original ones. 
+**** K 
+The matrix K is the element-wise exponentiation of C/epsilon, so it must be used only with this setting.
 
-The function "stop_SK" uses both this stop criterion.
+
+**** p and q 
+These two vectors are the marginal distributions, so they must be non-negative and with sum 1.
+
+**** T 
+T is a feasible transport plan between p and q.
+
+**** a and b 
+They are the vectors that are updated by the Sinkhorn algorithm.
+
+**** inner_constructor
+It takes just K, p, q and T. It just checks that the dimensions of this object are correct, and then it built an element of type data_SK with
+K, p, q, T, a \= constant vector with sum 1 (it actually could be any initialization, we just decided for this one) and $b \= \frac{q}{K^T*a}$
+     
+*** Function update_SK 
+Arguments: an element of type data_SK. 
+Output: it computes a single iteration of the Sinkhorn algorithm updating a, b and T in the following way: 
+     $$a = \frac{p}{K*b}, \quad b = \frac{q}{K^T*a}, \quad T = diag(a)*K*diag(b)$$
+
+*** Function compute_marginals 
+Arguments: a squared  matrix.
+Output: two vector, which are obtained summing all the rows and all the columns (one must think the matrix as the element T of a data_SK and 
+the hope is that this two vectors are "similar" to p and q).
+
+*** Function stop_SK_T
+Arguments: a vector history, of size at least 2, of elements of type data_SK and a float tol, which is the tolerance. 
+Output: it returns true if the 1-norm between history[end].T and history[end-1].T is less than tol, otherwise it return false.
+
+*** Function stop_SK_ab_old
+Arguments: a vector history, of size at least 1, of elements of type data_SK and a float tol, which is the tolerance. 
+Output: it computes the marginals $\mu$ and $\nu$ of history[end].T and it returns true if both the 1-norm of history[end].p-$\mu$ and 
+history[end-1].q-$\nu$ are less than tol, otherwise it return false.
+
+*** Function stop_SK_ab_new
+Arguments: a vector history, of size at least 1, of elements of type data_SK and a float tol, which is the tolerance. 
+Output: it does exactly the same of stop_SK_ab_old without using directly the T filed of the struct, but recomputing it using a, b and K fields.
+
+*** Function stop_SK
+Arguments: a vector history, of size at least 1, of elements of type data_SK and a float tol, which is the tolerance. 
+Output: it returns true if both stop_SK_T and stop_SK_ab_new return true on the same arguments, otherwise it returns false (this is the
+most precise stop criterion, since it checks both the difference betwwen the updating of the transport and how much the marginal distributions
+are different from the ones we want).
 
 
 ** loss.jl
