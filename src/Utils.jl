@@ -1,5 +1,6 @@
 """
-this returns the path of the home directory in the project
+this returns the path of the home directory in the project, very bug prone 
+but does its job
 """
 function return_home_dir()::String
     current_dir::String = pwd()

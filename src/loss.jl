@@ -1,4 +1,4 @@
-struct loss
+struct Loss
     """
     Given a real valued loss function L(a,b) of the form f1(a)+f2(b)-h1(a)*h2(b), we define the inner constructor that takes as input a strings
     which describes the loss function: the possible strings input are:
@@ -11,7 +11,7 @@ struct loss
     h1::Function
     h2::Function
 
-    function loss(s::String)
+    function Loss(s::String)
         if s == "L2"
             #string = s
             f1 = x->x^2
@@ -33,7 +33,7 @@ struct loss
 end #struct
 
 
-function GW_Cost(L::loss, M::MetricMeasureSpace, N::MetricMeasureSpace, T::Matrix{Float64}, ϵ::Float64)
+function GW_Cost(L::Loss, M::MetricMeasureSpace, N::MetricMeasureSpace, T::Matrix{Float64}, ϵ::Float64)
     """
     This function evaluate the tensor product mathcal{L}(M.C,N.C) tensor T,
     using the decomposition of a loss function in f1,f2,h1,h2.
@@ -44,9 +44,6 @@ function GW_Cost(L::loss, M::MetricMeasureSpace, N::MetricMeasureSpace, T::Matri
     if (size(M.C,1) != size(T,1)) || (size(N.C,1) != size(T,2))
         throw(ArgumentError("Wrong input size, it must be possible to compute the product matrix (M.C)*T*(N.C)."))
     end
-
-    E = zeros(size(T,1),size(T,2))
-    E = (M.C)*T*(N.C)
     E = (
         ((L.f1).(M.C))*((M.μ)*(ones(size(T,2)))')
         + ones(size(T,1))*((N.μ)'*((L.f2).(N.C))')
