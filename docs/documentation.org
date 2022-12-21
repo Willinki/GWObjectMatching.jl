@@ -1,0 +1,54 @@
+* Documentation 
+
+In this document, we describe the algorithms that we implemented to compute the Gromov-Wasserstein barycenters we talk about in theory.org.
+
+
+** MetricMeasureSpace.jl
+
+In this file we implement the struct we talk about in implementation.org.
+
+
+** RepeatUntilConvergence 
+
+The mutable struct "RepeatUntilConvergence{T}" is useful for iterate a function: it contains:
+    - an update function, that is the function that we need to iterate on something of type T;
+    - a criterion for convergence, that checks if we have to stop the execution, using the history;
+    - the history, under the form of a "CircularBuffer", which can be thought as a Vector{T} with fixed dimension
+    - an initial value of type T.
+
+Then the function "execute!" just do the process we described above: it takes the initial value, it applies the update function on it and stores 
+the new element in the history to check if the stop criterion is satisfied; if it's not it continues the execution.
+
+
+** SinkhornKnopp.jl
+
+The Sinkhorn-Knopp algorithm is an iterative algorithm which computes an (approximate) solution of the following minimum problem: 
+$$\min C \cdot \T + \varpesilon KL(T),$$
+where the minimum is taken over all the transport plans between two fixed marginal distributions p and q, $\varepsilon$ is a fixed 
+(small) constant and KL is the Kullback-Leibler divergence.
+
+The struct "data_SK" contains all the necessary to compute a single update of the Sinkhorn-Knopp algorithm.
+    - the matrix K is the element-wise exponentiation of C/epsilon;
+    - p and q are the marginal distribution;
+    - T is a feasible transport plan (at first initialized to be just the tensor product between p and q);
+    - a and b are the vectors that are updated by the Sinkhorn algorithm (at first we initialize a to be a constant vector and then we update b)
+     using the iterative formula
+     $$a = \frac{p}{K*b}, \quad b = \frac{q}{K^T*a}$$
+
+Then, the function "update_SK", given a data of type data_SK, computes the new a and b and it also updates $T = diag(a)*K*diag(b)$.
+
+We proposed two stop criterions: the first is "stop_SK_T" that check when two following iterations are close to each other; the other checks when 
+the marginal distributions of the transport obtained by the last iteration are close to the original ones. 
+
+The function "stop_SK" uses both this stop criterion.
+
+
+** loss.jl
+
+In this file we built a simple struct "loss" to make more compact the syntax in the future algorithms: it consists in a string (to remember in
+which case we are) and four functions, that depends on the string. The possible strings are just "KL" and "L2", and they refer to the 
+Kullback-Leibler cost or the standard Euclidean loss between two matrices. 
+In the two cases, the four functions of the struct are useful to actual compute the tensor product $L(C,C')\otimes T $, where C and C' are two 
+matrices (the matrices of two different metric measure spaces) and T is a transport plan. 
+
+This computation is made in the function "GW_cost", and it is the cost that we will use in the Sinkhorn algorithm. 
