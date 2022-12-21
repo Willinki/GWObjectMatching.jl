@@ -2,6 +2,7 @@ import ObjectMatching as OM
 using Plots
 using ArgParse
 import Distances: euclidean, pairwise
+import LinearAlgebra: diag
 
 function parse_commandline()
     s = ArgParseSettings()
@@ -47,7 +48,7 @@ function main()
     args::Dict                                = parse_commandline()
     files_paths::Vector{String}               = list_img_paths(args["mnist_number"])
     images_list::Vector{Matrix{Float64}}      = map(OM.load_image, files_paths)
-    n_points::Int64                           = 100 
+    n_points::Int64                           = 120 
     images_MMS::Vector{OM.MetricMeasureSpace} = [
         OM.MetricMeasureSpace(euclidean, image) for image in images_list
     ]
@@ -57,12 +58,13 @@ function main()
     ])
     @info "Computing Barycenter"
     barycenter_dist::OM.MetricMeasureSpace = OM.GW_barycenters(n_points, images_MMS)
-    @info "Reconstructing image"
-    barycenter_points::Matrix{Float64} = OM.reconstruct_points(
-        barycenter_dist.C;
-        reconstruction_pars...
-    )
-    plot_results(images_list, barycenter_points)
+    println(diag(barycenter_dist.C))
+    #@info "Reconstructing image"
+    #barycenter_points::Matrix{Float64} = OM.reconstruct_points(
+    #    barycenter_dist.C;
+    #    reconstruction_pars...
+    #)
+    #plot_results(images_list, barycenter_points)
 end
 
 main()
