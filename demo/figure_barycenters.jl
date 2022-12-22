@@ -14,7 +14,7 @@ function parse_commandline()
         "--toshape_name"
             help="End image for interpolation"
             arg_type=String
-            default="annulus"
+            default="heart2"
         "--npoints"
             help="Number of points for undersampling"
             arg_type=Int64
@@ -26,11 +26,11 @@ function parse_commandline()
         "--Ts_tol"
             help="Tolerance for the stopping condition on Ts"
             arg_type=Float64
-            default=10.
+            default=0.01
         "--Cp_niter"
             help="Number of iterations for Cp updates"
             arg_type=Int64
-            default=3
+            default=10
         "--epsilon"
             help="Epsilon value for the entropic approximation of the OT problem"
             arg_type=Float64
@@ -92,7 +92,7 @@ function main()
         images_MMS; barycenters_pars...
     )
     barycenter_points::Matrix{Float64} = OM.reconstruct_points(
-        images_MMS[1].C;
+        barycenter_dist.C;
         reconstruction_pars...
     )
     plot_results(images_list, barycenter_points)
