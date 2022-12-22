@@ -14,13 +14,13 @@ struct Loss
     function Loss(s::String)
         if s == "L2"
             #string = s
-            f1 = x->x^2
-            f2 = x->x^2
+            f1 = x->(x^2/2)
+            f2 = x->(x^2/2)
             h1 = x->x
-            h2 = x->2*x
+            h2 = x->x
         elseif s == "KL"
             #string = s
-            f1 = x->x*log(x)
+            f1 = x->(x*log(x)-x)
             f2 = x->x
             h1 = x->x
             h2 = x->log(x)
