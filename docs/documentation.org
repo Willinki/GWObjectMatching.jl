@@ -8,14 +8,104 @@ In this file we implement the struct we talk about in implementation.org.
 
 
 ** RepeatUntilConvergence 
-The mutable struct "RepeatUntilConvergence{T}" is useful for iterate a function: it contains:
-    - an update function, that is the function that we need to iterate on something of type T;
-    - a criterion for convergence, that checks if we have to stop the execution, using the history;
-    - the history, under the form of a "CircularBuffer", which can be thought as a Vector{T} with fixed dimension
-    - an initial value of type T.
+In this file, we defined a structure that can repeat a function until convergence. It will be more clear in the following.
 
-Then the function "execute!" just do the process we described above: it takes the initial value, it applies the update function on it and stores 
-the new element in the history to check if the stop criterion is satisfied; if it's not it continues the execution.
+*** abstract type BaseRepeatUntilConvergence{T}
+It is a parametric abstract type that has, as subtypes, the concrete parametric types 
+    - RepeatUntilConvergence
+    - LargeMemoryRepeatUntilConvergence 
+    - SingleValueRepeatUntilConvergence 
+
+*** mutable struct RepeatUntilConvergence{T}
+It is a parametric struct defined in the following way: 
+ 
+#+begin_src julia :results output
+mutable struct RepeatUntilConvergence{T} <: BaseRepeatUntilConvergence{T}
+    update_func::Function
+    has_converged::Function
+    history::CircularBuffer{T}
+    init_vals::T 
+end
+#+end_src
+
+**** T 
+T is the type on which a type RepeatUntilConvergence depends on: the idea is that we have an update function that takes some input of type T and 
+returns something of type T, so that we can iterate this function.
+
+**** update_func
+The update function is the function that we need to iterate on something of type T.
+
+**** has_converged
+This function is a criterion for convergence that returns a Bool type. It checks if we have to stop the execution, possibly using the history 
+field.
+
+**** history
+The history contains the output that we need to store to check the stop criterion. It has been organized in a CircularBuffer{T} type because, as
+we said above, all the outputs of the update function are of type T and here we can store only that elements, and we didn't choose a Vector{T}
+because maybe is not necessary to store all the outputs: for example the stop criterion could involve just the last two output, so that we need 
+to have a CircularBuffer{T} of length 2.
+
+**** init_vals
+It is the initial value of the iterative process, so it is the first value that is updated, which means that it must be of type T.
+
+**** inner constructor
+Arguments: an update function, an has_converged function and a Int memory_size.
+It returns an element of type RepeatUntilConvergence{T} initializing the memory size of the CircularBuffer{T} according to memory_size. 
+Before doing that, it checks that the update function has a method for type T and returns a type T, and it check that the has_converged function
+has a method for type Vector{T} and returns a Bool type, otherwise it raises an error. 
+Achtung: it doesn't initialize init_vals. 
+
+*** mutable struct LargeMamoryRepeatUntilConvergence{T}
+It is a parametric struct defined in the following way: 
+ 
+#+begin_src julia :results output
+mutable struct RepeatUntilConvergence{T} <: BaseRepeatUntilConvergence{T}
+    update_func::Function
+    has_converged::Function
+    history::Vector{T}
+    init_vals::T 
+end
+#+end_src
+
+It is exactly as the other, except that the history is a Vector{T}. It could be used when we need to use all the outputs the execution produced.
+We didn't implemented it, because we never use it.
+
+*** mutable struct SingleValueRepeatUntilConvergence{T}
+It is a parametric struct defined in the following way: 
+ 
+#+begin_src julia :results output
+mutable struct RepeatUntilConvergence{T} <: BaseRepeatUntilConvergence{T}
+    update_func::Function
+    has_converged::Function
+    history::T
+    init_vals::T 
+end
+#+end_src
+ 
+It is exactly as the others, except that the history is an element of type T. It could be used when we need to store only the last output (we
+could use also the classic RepeatUntilConvergence{T} with memory_size=1, but this is more efficient in this case).
+We didn't implemented it, because we never use it.
+
+*** Function update_history!
+Arguments (first method): an element of type either RepeatUntilConvergence{T} or LargeMemoryRepeatUntilConvergence{T}, and an element iter_result
+of type T (usually this is the result of an execution of the update function).
+Output: the function pushes the iter_result at the end of the history.
+
+Arguments (second method): an element of type SingleValueRepeatUntilConvergence{T} and an element iter_result
+of type T (usually this is the result of an execution of the update function).
+Output: it lets the history field to be iter_result.
+
+*** Function has_converged_wrapper
+Arguments (first method): an element of type RepeatUntilConvergence{T}.
+Output: it converts the CircularBuffer{T} into a Vector{T} and then it returns true or false according to the has_converged function applied on
+the converted history.
+
+Arguments (second method): an element of type either LargeMemoryRepeatUntilConvergence{T} or SingleValueRepeatUntilConvergence{T}.
+Output: it returns true or false according to the has_converged function applied on
+the converted history.
+
+*** Function execute! 
+It just execute the process of a BaseRepeatUntilConvergence{T} element, given an initial value.
 
 
 ** SinkhornKnopp.jl
