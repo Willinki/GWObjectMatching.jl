@@ -78,8 +78,7 @@ function update_barycenters(
                 stop_transport $ (ratio_thresh=Ts_tol,); 
                 memory_size=2
             );
-            Ts, _ = execute!(update_transport_repeater, init_Ts(Cp, Cs));
-            Ts
+            execute!(update_transport_repeater, init_Ts(Cp, Cs))[1]
         end
         for Cs in Cs_collection
     ] 
