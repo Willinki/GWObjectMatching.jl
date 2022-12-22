@@ -71,21 +71,22 @@ function update_barycenters(
         SK_tol::Float64,
     )::OM.MetricMeasureSpace
     #for every Cs we compute the transport to Cp, save it to Ts_collections
-    Ts_collection = Vector{Matrix{Float64}}(undef, length(Cs_collection))  
-    for (s, Cs) in enumerate(Cs_collection)
-        Ts::Matrix{Float64} = init_Ts(Cp, Cs)
-        update_transport_repeater = OM.RepeatUntilConvergence{Matrix{Float64}}(
-            update_transport $ (Cs=Cs, Cp=Cp, loss=loss, ϵ=ϵ, SK_tol=SK_tol), 
-            stop_transport $ (ratio_thresh=Ts_tol,); 
-            memory_size=2
-        )
-        Ts_final, _ = execute!(update_transport_repeater, Ts)
-        Ts_collection[s] = Ts_final #checked, this does not cause any bug 
-    end
+    Ts_collection = [
+        begin 
+            update_transport_repeater = OM.RepeatUntilConvergence{Matrix{Float64}}(
+                update_transport $ (Cs=Cs, Cp=Cp, loss=loss, ϵ=ϵ, SK_tol=SK_tol), 
+                stop_transport $ (ratio_thresh=Ts_tol,); 
+                memory_size=2
+            );
+            Ts, _ = execute!(update_transport_repeater, init_Ts(Cp, Cs));
+            Ts
+        end
+        for Cs in Cs_collection
+    ] 
     # with the new Ts we update the barycenter
     return compute_C(
         λs_collection,
-        map(x->convert(Matrix{Float64},(x)'), Ts_collection), 
+        map(x->convert(Matrix{Float64},(x)'), Ts_collection), # also tested with deepcopy 
         Cs_collection,
         Cp.μ,
         loss
@@ -138,25 +139,17 @@ function compute_C(
         loss::OM.Loss
     )::OM.MetricMeasureSpace
     S = length(λs_collection.v)
-    Ms_collection = fill(zeros(length(p),length(p)), S)
-    # TODO: improve syntax
     if loss.string == "L2"
-        for i = 1:S
-            Ms_collection[i] = λs_collection.v[i]*(
-                (Ts_collection[i]')*((Cs_collection[i].C)*(Ts_collection[i]))
-                )         
-        end
-        return OM.MetricMeasureSpace((sum(Ms_collection)./(p*p')),p)
+        Ms_collection = [
+            λs * Ts' * Cs.C * Ts
+            for (λs, Ts, Cs) in zip(λs_collection.v, Ts_collection, Cs_collection)
+        ]
+        return OM.MetricMeasureSpace(sum(Ms_collection)./(p*p'), p)
     else #if loss.string == "KL"
-        for i = 1:S
-            j = size((Cs_collection[i].C),1)
-            (((Cs_collection[i].C).>=0) == ones(j,j)) || throw(ArgumentError(
-                "If the loss is the KL-loss, all the Cs' must be non-negative."
-            ))
-            Ms_collection[i] = λs_collection.v[i]*(
-                (Ts_collection[i]')*(log.(Cs_collection[i].C)*(Ts_collection[i]))
-                ) 
-        end
+        Ms_collection = [
+            λs.v * Ts' * log.(Cs.C) * Ts
+            for (λs, Ts, Cs) in zip(λs_collection.v, Ts_collection, Cs_collection)
+        ]
         return OM.MetricMeasureSpace(exp.(sum(Ms_collection)./(p*p')),p)
     end
 end

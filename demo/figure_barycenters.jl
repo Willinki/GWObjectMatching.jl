@@ -1,5 +1,6 @@
 import ObjectMatching as OM
 import Distances: euclidean
+import LinearAlgebra: diag
 using PartialFunctions
 using Plots
 using ArgParse
@@ -26,7 +27,7 @@ function parse_commandline()
         "--Ts_tol"
             help="Tolerance for the stopping condition on Ts"
             arg_type=Float64
-            default=0.01
+            default=0.001
         "--Cp_niter"
             help="Number of iterations for Cp updates"
             arg_type=Int64
@@ -95,6 +96,8 @@ function main()
         barycenter_dist.C;
         reconstruction_pars...
     )
+    println(map(x->round(x, digits=3), diag(barycenter_dist.C)))
+    println(map(x->round(x, digits=3), barycenter_dist.C[:, 1]))
     plot_results(images_list, barycenter_points)
 end
 

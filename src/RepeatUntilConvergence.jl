@@ -144,6 +144,7 @@ Returns
 - `iter_results` are the results of the last iteration. 
 - `R` is the updated `RepeatUntilConvergence` object.
 """
+
 function execute!(R::BaseRepeatUntilConvergence{T}, init_vals::T) where T 
     R.init_vals = deepcopy(init_vals)
     iter_results = R.update_func(R.init_vals)

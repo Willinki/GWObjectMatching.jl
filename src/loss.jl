@@ -44,10 +44,11 @@ function GW_Cost(L::Loss, M::MetricMeasureSpace, N::MetricMeasureSpace, T::Matri
     if (size(M.C,1) != size(T,1)) || (size(N.C,1) != size(T,2))
         throw(ArgumentError("Wrong input size, it must be possible to compute the product matrix (M.C)*T*(N.C)."))
     end
+    # removed parenthesis
     E = (
-        ((L.f1).(M.C))*((M.μ)*(ones(size(T,2)))')
-        + ones(size(T,1))*((N.μ)'*((L.f2).(N.C))')
-        - ((L.h1).(M.C))*T*((L.h2).(N.C))' 
+        (L.f1).(M.C) * M.μ * ones(length(N.μ))' 
+        + ones(length(M.μ)) * N.μ' * (L.f2).(N.C)'
+        - (L.h1).(M.C) * T * (L.h2).(N.C)'
     )
     E .= exp.(-E./ϵ)
 
