@@ -30,8 +30,7 @@ struct data_SK
         size(T,2) == length(q) || throw(ArgumentError(
             "The number of columns of T must be the same of the length of q."
         ))
-        # the paper initializes to a vector of ones, don't know if we should change
-        a = 1/(length(p))*ones(length(p))
+        a = ones(length(p))
         b = q./((K')*a)
         return new(K, p, q, T, a, b)
     end

@@ -6,7 +6,7 @@ using LinearAlgebra
 
 @testset "Compute Barycenters" begin
     ## parameters
-    ϵ = 0.008
+    ϵ = 0.01
     Cp_niter = 1 
     Ts_tol = 1e-4
     SK_tol = 1e-4
