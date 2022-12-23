@@ -46,12 +46,11 @@ function GW_Cost(L::Loss, M::MetricMeasureSpace, N::MetricMeasureSpace, T::Matri
     end
     # removed parenthesis
     E = (
-        (L.f1).(M.C) * M.μ * ones(length(N.μ))' 
-        + ones(length(M.μ)) * N.μ' * (L.f2).(N.C)'
+        #(L.f1).(M.C) * M.μ * ones(length(N.μ))' 
+        #+ ones(length(M.μ)) * N.μ' * (L.f2).(N.C)'
         - (L.h1).(M.C) * T * (L.h2).(N.C)'
     )
     E .= exp.(-E./ϵ)
-
     return E
 end #function
         
