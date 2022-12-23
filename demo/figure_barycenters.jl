@@ -27,7 +27,7 @@ function parse_commandline()
         "--Ts_tol"
             help="Tolerance for the stopping condition on Ts"
             arg_type=Float64
-            default=0.001
+            default=1e-12
         "--Cp_niter"
             help="Number of iterations for Cp updates"
             arg_type=Int64
@@ -35,15 +35,7 @@ function parse_commandline()
         "--epsilon"
             help="Epsilon value for the entropic approximation of the OT problem"
             arg_type=Float64
-            default=0.005
-        "--reconstruct_tol"
-            help="Tolerance for points reconstruction algorithm"
-            arg_type=Float64
-            default=1e-3
-        "--reconstruct_max_iter"
-            help="Max number of iterations for points reconstruction algorithm"
-            arg_type=Int64
-            default=2000
+            default=0.007
     end
     return parse_args(s)
 end
@@ -77,10 +69,6 @@ function main()
     images_MMS::Vector{OM.MetricMeasureSpace} = [
         OM.MetricMeasureSpace(euclidean, image) for image in images_list
     ]
-    reconstruction_pars = Dict([
-        (:maxiter,  args["reconstruct_max_iter"]),
-        (:tol,      args["reconstruct_tol"]),
-    ])
     barycenters_pars = Dict([
         (:n_points,   args["npoints"]),
         (:ϵ,         args["epsilon"]),
@@ -94,7 +82,6 @@ function main()
     )
     barycenter_points::Matrix{Float64} = OM.reconstruct_points(
         barycenter_dist.C;
-        reconstruction_pars...
     )
     println(map(x->round(x, digits=3), diag(barycenter_dist.C)))
     println(map(x->round(x, digits=3), barycenter_dist.C[:, 1]))
