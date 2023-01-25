@@ -225,3 +225,29 @@ Arguments: a Loss field, two metric measure spaces $M=(C,\mu)$ and $N=(D,\nu)$, 
 Output: it computes the tensor product $E = L(C,D)\otimes T$ (it raises an error if the size are not compatible) and then it returns the
 component-wise exponentiation of $E/\varepsilon$, so that the output is ready to be given in input as field K of a data_SK, so that it can be
 used for the Sinkhorn algorithm.
+
+
+** Barycenters.jl
+In this file, we use all the code developed before to implement the main algorithm "GW_barycenters" that computes an approximatione of the 
+Gromov Wasserstein barycenter. 
+
+*** Function update_transport
+Arguments:  - a matrix Ts of Float (it is the transport plan to be updated)
+            - two MetricMeasureSpace data, between it has to compute the optimal transport plan
+            - a loss function (using a struct loss)
+            - a positive float epsilon
+            - a posotive tolerance to stop the Sinkhorn algorithm.
+Output: building a struct RepeatUntilConvergence, it runs the Sinkhorn algorithm between the weights of the metric measure spaces with cost K,
+evaluated using the function GW_cost, so it returns an approximation of the optimal transport plan between the two spaces.
+
+*** Function compute_C 
+Arguments:  - a ConvexSum type $\lambda$
+            - a Vector of MetricMeasureSpace, that are the ones between, in the end, we want to compute the barycenters
+            - a Vector of Float64, that will be the weight of a MetricMeasureSpace
+            - a Vector of Matrix{Float64}, that is a collection of transport plans between p and the collection of MetricMeasurespaces 
+            - a loss function
+Output: if the loss function is the Euclidean loss, it calculates 
+$$C = \frac{1}{p p^T} \sum_{s} \lambda_s T_s^T C_s T_s,$$
+otherwise the loss function is the Kullback-Leibler function and it calculates
+$$C = exp (\frac{1}{p p^T} \sum_{s} \lambda_s T_s^T log(C_s) T_s).$$
+Then the output is the MetricMeasureSpace given by the couple (C,p).
