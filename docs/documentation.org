@@ -240,6 +240,11 @@ Arguments:  - a matrix Ts of Float (it is the transport plan to be updated)
 Output: building a struct RepeatUntilConvergence, it runs the Sinkhorn algorithm between the weights of the metric measure spaces with cost K,
 evaluated using the function GW_cost, so it returns an approximation of the optimal transport plan between the two spaces.
 
+*** Function stop_tranport
+Arguments: a Vector of Matrix{Float64} and a Float64.
+Output: it checks if the last two elements of the Vector are close enough (considering if the ratio between the difference of the matrices and the
+last matrix is, w.r.t. the infinity norm, less than the error input). 
+
 *** Function compute_C 
 Arguments:  - a ConvexSum type $\lambda$
             - a Vector of MetricMeasureSpace, that are the ones between, in the end, we want to compute the barycenters
@@ -247,7 +252,53 @@ Arguments:  - a ConvexSum type $\lambda$
             - a Vector of Matrix{Float64}, that is a collection of transport plans between p and the collection of MetricMeasurespaces 
             - a loss function
 Output: if the loss function is the Euclidean loss, it calculates 
-$$C = \frac{1}{p p^T} \sum_{s} \lambda_s T_s^T C_s T_s,$$
+    $$C = \frac{1}{p p^T} \sum_{s} \lambda_s T_s^T C_s T_s,$$
+
 otherwise the loss function is the Kullback-Leibler function and it calculates
-$$C = exp (\frac{1}{p p^T} \sum_{s} \lambda_s T_s^T log(C_s) T_s).$$
+    $$C = exp (\frac{1}{p p^T} \sum_{s} \lambda_s T_s^T log(C_s) T_s).$$
+
 Then the output is the MetricMeasureSpace given by the couple (C,p).
+
+*** Function init_Ts 
+Arguments: two MetricMeasureSpace data.
+Output: it returns the rank-one matrix obtained by multiplying the weights of the arguments, that is the trivial transport. 
+
+*** Function update_barycenters 
+Arguments:  - a MetricMeasureSpace Cp
+            - a Vector of MetricMeasureSpace, that are the ones between, in the end, we want to compute the barycenters
+            - a ConvexSum type $\lambda$
+            - a loss function
+            - a Float $\epsilon$
+            - a Float64 Ts_tol, that is the error that we can obtain updating the transport plans
+            - a Float64 SK_tol, that is the error that we admit on the iteration of the Sinkhorn algoritm.
+Output:  for any Cs in the Vector of MetricMeasureSpace, it updates the transport between Cp and Cs until the tolerance Ts_tol is satisfied.
+To do so we use a struct RepeatUntilConvergence, repeating the function update_transport (keeping fixed all the data but the Ts) with stop 
+criterion given by the function stop_transport, and with initial data given by init_Ts(Cp,Cs).
+In the end the function returns the output of the function compute_C using our data and the Vector
+of transport plans that we obtained (so, in the end, it is updating the matrix of the MetricMeasureSpace Cp)
+
+*** Function stop_barycenters_niter
+Arguments: a Vector, called history, of MetricMeasureSpace data and an Int64.
+Output: the algorithm returns true if the length of the history is greater than the Int64 data, otherwise it returns false.
+
+*** Function init_C 
+Argument: a Vector p of Float64.
+Output: it initializes the barycenter to be a random square matrix C (with zeros on the diagonal) of size length(p), and then it returns the 
+MetricMeasureSpace given by the couple (C,p).
+
+*** Function GW_barycenters (the main function)
+Arguments:  - a (collection) Vector Cs_collection of MetricMeasureSpace data
+            - a ConvexSum type $\lambda$
+            - a Int64 n (the size of the barycenter as a MetricMeasureSpace)
+            - a Vector p of Float64 (the weight of the barycenter)
+            - a loss function
+            - a Float $\epsilon$
+            - a Int64 Cp_niter (the number of iteration of the update_barycenters function)
+            - a Float64 Ts_tol, that is the error that we can obtain updating the transport plans
+            - a Float64 SK_tol, that is the error that we admit on the iteration of the Sinkhorn algoritm.
+Output: keeping fixed the parameters Cs_collection, $\lambda$, loss, $\epsilon$, Ts_tol, SK_tol, it defines the function 
+update_barycenters_repeater, that takes as input a MetricMeasureSpace and returns aMetricMEasureSpace. So, using a struct RepeatUntilConvergence, 
+starting from the MetricMeasureSpace init_C(p), repeating the function update_barycenters_repeater, with stop function stop_barycenters_niter, 
+the functions returns the last MetricMeasureSpace obtained by the iteration, that is the approximation of the barycenters that we were looking 
+for.
+            
