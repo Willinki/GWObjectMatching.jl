@@ -1,3 +1,11 @@
+"""
+This is a demo script.
+Given two images in the data/shapes directory, it performs interpolation between the
+two. It it possible to specify multiple options and customize the script with the
+options below.
+"""
+
+
 import ObjectMatching as OM
 import Distances: euclidean
 import LinearAlgebra: diag
