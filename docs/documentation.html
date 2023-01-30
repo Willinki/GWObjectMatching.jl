@@ -1,0 +1,878 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2023-01-30 Mon 18:53 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lrm;</title>
+<meta name="author" content="Davide Badalotti" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+</style>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content" class="content">
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orga6e0084">1. Documentation</a>
+<ul>
+<li><a href="#org466bcfa">1.1. MetricMeasureSpace.jl</a></li>
+<li><a href="#orge82ac8e">1.2. RepeatUntilConvergence</a>
+<ul>
+<li><a href="#orgd605093">1.2.1. abstract type BaseRepeatUntilConvergence{T}</a></li>
+<li><a href="#org9629849">1.2.2. mutable struct RepeatUntilConvergence{T}</a></li>
+<li><a href="#org9b88b9c">1.2.3. mutable struct LargeMamoryRepeatUntilConvergence{T}</a></li>
+<li><a href="#org02979e6">1.2.4. mutable struct SingleValueRepeatUntilConvergence{T}</a></li>
+<li><a href="#org9722c35">1.2.5. Function update<sub>history</sub>!</a></li>
+<li><a href="#org36c815c">1.2.6. Function has<sub>converged</sub><sub>wrapper</sub></a></li>
+<li><a href="#orgce00407">1.2.7. Function execute!</a></li>
+</ul>
+</li>
+<li><a href="#orgfa0c19d">1.3. SinkhornKnopp.jl</a>
+<ul>
+<li><a href="#orgaa80273">1.3.1. struct data<sub>SK</sub></a></li>
+<li><a href="#orgfeec790">1.3.2. Function update<sub>SK</sub></a></li>
+<li><a href="#org7a8c3ec">1.3.3. Function compute<sub>marginals</sub></a></li>
+<li><a href="#org7035792">1.3.4. Function stop<sub>SK</sub><sub>T</sub></a></li>
+<li><a href="#org5ee4c49">1.3.5. Function stop<sub>SK</sub><sub>ab</sub><sub>old</sub></a></li>
+<li><a href="#org67a75a3">1.3.6. Function stop<sub>SK</sub><sub>ab</sub><sub>new</sub></a></li>
+<li><a href="#org4d01084">1.3.7. Function stop<sub>SK</sub></a></li>
+</ul>
+</li>
+<li><a href="#org6869cda">1.4. loss.jl</a>
+<ul>
+<li><a href="#org5734442">1.4.1. struct loss</a></li>
+<li><a href="#orgfccaf41">1.4.2. Function GW<sub>cost</sub></a></li>
+</ul>
+</li>
+<li><a href="#orgba29220">1.5. Barycenters.jl</a>
+<ul>
+<li><a href="#org508b8da">1.5.1. Function update<sub>transport</sub></a></li>
+<li><a href="#org935bc3b">1.5.2. Function stop<sub>tranport</sub></a></li>
+<li><a href="#orgd5ae4f7">1.5.3. Function compute<sub>C</sub></a></li>
+<li><a href="#org62320e4">1.5.4. Function init<sub>Ts</sub></a></li>
+<li><a href="#org22c1f36">1.5.5. Function update<sub>barycenters</sub></a></li>
+<li><a href="#orgdea3eb3">1.5.6. Function stop<sub>barycenters</sub><sub>niter</sub></a></li>
+<li><a href="#org61e823c">1.5.7. Function init<sub>C</sub></a></li>
+<li><a href="#orgcce97b8">1.5.8. Function GW<sub>barycenters</sub> (the main function)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orga6e0084" class="outline-2">
+<h2 id="orga6e0084"><span class="section-number-2">1.</span> Documentation</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+In this document, we describe the algorithms that we implemented to compute the Gromov-Wasserstein barycenters we talk about in theory.org.
+</p>
+</div>
+
+
+<div id="outline-container-org466bcfa" class="outline-3">
+<h3 id="org466bcfa"><span class="section-number-3">1.1.</span> MetricMeasureSpace.jl</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+In this file we implement the struct we talk about in implementation.org.
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-orge82ac8e" class="outline-3">
+<h3 id="orge82ac8e"><span class="section-number-3">1.2.</span> RepeatUntilConvergence</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+In this file, we defined a structure that can repeat a function until convergence. It will be more clear in the following.
+</p>
+</div>
+
+<div id="outline-container-orgd605093" class="outline-4">
+<h4 id="orgd605093"><span class="section-number-4">1.2.1.</span> abstract type BaseRepeatUntilConvergence{T}</h4>
+<div class="outline-text-4" id="text-1-2-1">
+<p>
+It is a parametric abstract type that has, as subtypes, the concrete parametric types 
+</p>
+<ul class="org-ul">
+<li>RepeatUntilConvergence</li>
+<li>LargeMemoryRepeatUntilConvergence</li>
+<li>SingleValueRepeatUntilConvergence</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org9629849" class="outline-4">
+<h4 id="org9629849"><span class="section-number-4">1.2.2.</span> mutable struct RepeatUntilConvergence{T}</h4>
+<div class="outline-text-4" id="text-1-2-2">
+<p>
+It is a parametric struct defined in the following way: 
+</p>
+
+<div class="org-src-container">
+<pre class="src src-julia"><span style="color: #5EC4FF;">mutable struct</span> <span style="color: #EBBF83;">RepeatUntilConvergence</span><span style="color: #5EC4FF;">{</span>T<span style="color: #5EC4FF;">}</span> &lt;: <span style="color: #EBBF83;">BaseRepeatUntilConvergence</span><span style="color: #5EC4FF;">{</span>T<span style="color: #5EC4FF;">}</span>
+    update_func::<span style="color: #EBBF83;">Function</span>
+    has_converged::<span style="color: #EBBF83;">Function</span>
+    history::<span style="color: #EBBF83;">CircularBuffer</span><span style="color: #5EC4FF;">{</span>T<span style="color: #5EC4FF;">}</span>
+    init_vals::<span style="color: #EBBF83;">T</span> 
+<span style="color: #5EC4FF;">end</span>
+</pre>
+</div>
+</div>
+
+<ol class="org-ol">
+<li><a id="org2c51695"></a>T<br />
+<div class="outline-text-5" id="text-1-2-2-1">
+<p>
+T is the type on which a type RepeatUntilConvergence depends on: the idea is that we have an update function that takes some input of type T and 
+returns something of type T, so that we can iterate this function.
+</p>
+</div>
+</li>
+
+<li><a id="org40f7a67"></a>update<sub>func</sub><br />
+<div class="outline-text-5" id="text-1-2-2-2">
+<p>
+The update function is the function that we need to iterate on something of type T.
+</p>
+</div>
+</li>
+
+<li><a id="orgd334f11"></a>has<sub>converged</sub><br />
+<div class="outline-text-5" id="text-1-2-2-3">
+<p>
+This function is a criterion for convergence that returns a Bool type. It checks if we have to stop the execution, possibly using the history 
+field.
+</p>
+</div>
+</li>
+
+<li><a id="org0a1ffba"></a>history<br />
+<div class="outline-text-5" id="text-1-2-2-4">
+<p>
+The history contains the output that we need to store to check the stop criterion. It has been organized in a CircularBuffer{T} type because, as
+we said above, all the outputs of the update function are of type T and here we can store only that elements, and we didn't choose a Vector{T}
+because maybe is not necessary to store all the outputs: for example the stop criterion could involve just the last two output, so that we need 
+to have a CircularBuffer{T} of length 2.
+</p>
+</div>
+</li>
+
+<li><a id="org3f7a111"></a>init<sub>vals</sub><br />
+<div class="outline-text-5" id="text-1-2-2-5">
+<p>
+It is the initial value of the iterative process, so it is the first value that is updated, which means that it must be of type T.
+</p>
+</div>
+</li>
+
+<li><a id="org51d38d9"></a>inner constructor<br />
+<div class="outline-text-5" id="text-1-2-2-6">
+<p>
+Arguments: an update function, an has<sub>converged</sub> function and a Int memory<sub>size</sub>.
+It returns an element of type RepeatUntilConvergence{T} initializing the memory size of the CircularBuffer{T} according to memory<sub>size</sub>. 
+Before doing that, it checks that the update function has a method for type T and returns a type T, and it check that the has<sub>converged</sub> function
+has a method for type Vector{T} and returns a Bool type, otherwise it raises an error. 
+Achtung: it doesn't initialize init<sub>vals</sub>. 
+</p>
+</div>
+</li>
+</ol>
+</div>
+
+<div id="outline-container-org9b88b9c" class="outline-4">
+<h4 id="org9b88b9c"><span class="section-number-4">1.2.3.</span> mutable struct LargeMamoryRepeatUntilConvergence{T}</h4>
+<div class="outline-text-4" id="text-1-2-3">
+<p>
+It is a parametric struct defined in the following way: 
+</p>
+
+<div class="org-src-container">
+<pre class="src src-julia"><span style="color: #5EC4FF;">mutable struct</span> <span style="color: #EBBF83;">RepeatUntilConvergence</span><span style="color: #5EC4FF;">{</span>T<span style="color: #5EC4FF;">}</span> &lt;: <span style="color: #EBBF83;">BaseRepeatUntilConvergence</span><span style="color: #5EC4FF;">{</span>T<span style="color: #5EC4FF;">}</span>
+    update_func::<span style="color: #EBBF83;">Function</span>
+    has_converged::<span style="color: #EBBF83;">Function</span>
+    history::<span style="color: #EBBF83;">Vector</span><span style="color: #5EC4FF;">{</span>T<span style="color: #5EC4FF;">}</span>
+    init_vals::<span style="color: #EBBF83;">T</span> 
+<span style="color: #5EC4FF;">end</span>
+</pre>
+</div>
+
+<p>
+It is exactly as the other, except that the history is a Vector{T}. It could be used when we need to use all the outputs the execution produced.
+We didn't implemented it, because we never use it.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org02979e6" class="outline-4">
+<h4 id="org02979e6"><span class="section-number-4">1.2.4.</span> mutable struct SingleValueRepeatUntilConvergence{T}</h4>
+<div class="outline-text-4" id="text-1-2-4">
+<p>
+It is a parametric struct defined in the following way: 
+</p>
+
+<div class="org-src-container">
+<pre class="src src-julia"><span style="color: #5EC4FF;">mutable struct</span> <span style="color: #EBBF83;">RepeatUntilConvergence</span><span style="color: #5EC4FF;">{</span>T<span style="color: #5EC4FF;">}</span> &lt;: <span style="color: #EBBF83;">BaseRepeatUntilConvergence</span><span style="color: #5EC4FF;">{</span>T<span style="color: #5EC4FF;">}</span>
+    update_func::<span style="color: #EBBF83;">Function</span>
+    has_converged::<span style="color: #EBBF83;">Function</span>
+    history::<span style="color: #EBBF83;">T</span>
+    init_vals::<span style="color: #EBBF83;">T</span> 
+<span style="color: #5EC4FF;">end</span>
+</pre>
+</div>
+
+<p>
+It is exactly as the others, except that the history is an element of type T. It could be used when we need to store only the last output (we
+could use also the classic RepeatUntilConvergence{T} with memory<sub>size</sub>=1, but this is more efficient in this case).
+We didn't implemented it, because we never use it.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9722c35" class="outline-4">
+<h4 id="org9722c35"><span class="section-number-4">1.2.5.</span> Function update<sub>history</sub>!</h4>
+<div class="outline-text-4" id="text-1-2-5">
+<p>
+Arguments (first method): an element of type either RepeatUntilConvergence{T} or LargeMemoryRepeatUntilConvergence{T}, and an element iter<sub>result</sub>
+of type T (usually this is the result of an execution of the update function).
+Output: the function pushes the iter<sub>result</sub> at the end of the history.
+</p>
+
+<p>
+Arguments (second method): an element of type SingleValueRepeatUntilConvergence{T} and an element iter<sub>result</sub>
+of type T (usually this is the result of an execution of the update function).
+Output: it lets the history field to be iter<sub>result</sub>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org36c815c" class="outline-4">
+<h4 id="org36c815c"><span class="section-number-4">1.2.6.</span> Function has<sub>converged</sub><sub>wrapper</sub></h4>
+<div class="outline-text-4" id="text-1-2-6">
+<p>
+Arguments (first method): an element of type RepeatUntilConvergence{T}.
+Output: it converts the CircularBuffer{T} into a Vector{T} and then it returns true or false according to the has<sub>converged</sub> function applied on
+the converted history.
+</p>
+
+<p>
+Arguments (second method): an element of type either LargeMemoryRepeatUntilConvergence{T} or SingleValueRepeatUntilConvergence{T}.
+Output: it returns true or false according to the has<sub>converged</sub> function applied on
+the converted history.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgce00407" class="outline-4">
+<h4 id="orgce00407"><span class="section-number-4">1.2.7.</span> Function execute!</h4>
+<div class="outline-text-4" id="text-1-2-7">
+<p>
+It just execute the process of a BaseRepeatUntilConvergence{T} element, given an initial value.
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgfa0c19d" class="outline-3">
+<h3 id="orgfa0c19d"><span class="section-number-3">1.3.</span> SinkhornKnopp.jl</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+The Sinkhorn-Knopp algorithm is an iterative algorithm which computes an (approximate) solution of the following minimum problem: 
+\[\min \; C \cdot \T + \varpesilon KL(T),\]
+where the minimum is taken over all the transport plans between two fixed marginal distributions p and q, \(\varepsilon\) is a fixed 
+(small) constant and KL is the Kullback-Leibler divergence.
+</p>
+</div>
+
+<div id="outline-container-orgaa80273" class="outline-4">
+<h4 id="orgaa80273"><span class="section-number-4">1.3.1.</span> struct data<sub>SK</sub></h4>
+<div class="outline-text-4" id="text-1-3-1">
+<p>
+The struct "data<sub>SK</sub>" contains all the necessary to compute a single update of the Sinkhorn-Knopp algorithm.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-julia"><span style="color: #5EC4FF;">struct</span> <span style="color: #EBBF83;">data_SK</span>:
+    K::<span style="color: #EBBF83;">Matrix</span><span style="color: #5EC4FF;">{</span>Float64<span style="color: #5EC4FF;">}</span> 
+    p::<span style="color: #EBBF83;">Vector</span><span style="color: #5EC4FF;">{</span>Float64<span style="color: #5EC4FF;">}</span> 
+    q::<span style="color: #EBBF83;">Vector</span><span style="color: #5EC4FF;">{</span>Float64<span style="color: #5EC4FF;">}</span> 
+    T::<span style="color: #EBBF83;">Matrix</span><span style="color: #5EC4FF;">{</span>Float64<span style="color: #5EC4FF;">}</span>       
+    a::<span style="color: #EBBF83;">Vector</span><span style="color: #5EC4FF;">{</span>Float64<span style="color: #5EC4FF;">}</span>       
+    b::<span style="color: #EBBF83;">Vector</span><span style="color: #5EC4FF;">{</span>Float64<span style="color: #5EC4FF;">}</span>
+    inner_constructor<span style="color: #5EC4FF;">(</span>K,p,q,T<span style="color: #5EC4FF;">)</span>   
+<span style="color: #5EC4FF;">end</span>
+</pre>
+</div>
+</div>
+
+<ol class="org-ol">
+<li><a id="orgc29db98"></a>K<br />
+<div class="outline-text-5" id="text-1-3-1-1">
+<p>
+The matrix K is the element-wise exponentiation of C/epsilon, so it must be used only with this setting.
+</p>
+</div>
+</li>
+
+
+<li><a id="org741ba92"></a>p and q<br />
+<div class="outline-text-5" id="text-1-3-1-2">
+<p>
+These two vectors are the marginal distributions, so they must be non-negative and with sum 1.
+</p>
+</div>
+</li>
+
+<li><a id="org7158952"></a>T<br />
+<div class="outline-text-5" id="text-1-3-1-3">
+<p>
+T is a feasible transport plan between p and q.
+</p>
+</div>
+</li>
+
+<li><a id="orga3ff166"></a>a and b<br />
+<div class="outline-text-5" id="text-1-3-1-4">
+<p>
+They are the vectors that are updated by the Sinkhorn algorithm.
+</p>
+</div>
+</li>
+
+<li><a id="orgf80e680"></a>inner<sub>constructor</sub><br />
+<div class="outline-text-5" id="text-1-3-1-5">
+<p>
+It takes just K, p, q and T. It just checks that the dimensions of this object are correct, and then it built an element of type data<sub>SK</sub> with
+K, p, q, T, a \= constant vector with sum 1 (it actually could be any initialization, we just decided for this one) and \(b \= \frac{q}{K^T*a}\)
+</p>
+</div>
+</li>
+</ol>
+</div>
+
+<div id="outline-container-orgfeec790" class="outline-4">
+<h4 id="orgfeec790"><span class="section-number-4">1.3.2.</span> Function update<sub>SK</sub></h4>
+<div class="outline-text-4" id="text-1-3-2">
+<p>
+Arguments: an element of type data<sub>SK</sub>. 
+Output: it computes a single iteration of the Sinkhorn algorithm updating a, b and T in the following way: 
+     \[a = \frac{p}{K*b}, \quad b = \frac{q}{K^T*a}, \quad T = diag(a)*K*diag(b)\]
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7a8c3ec" class="outline-4">
+<h4 id="org7a8c3ec"><span class="section-number-4">1.3.3.</span> Function compute<sub>marginals</sub></h4>
+<div class="outline-text-4" id="text-1-3-3">
+<p>
+Arguments: a squared  matrix.
+Output: two vector, which are obtained summing all the rows and all the columns (one must think the matrix as the element T of a data<sub>SK</sub> and 
+the hope is that this two vectors are "similar" to p and q).
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7035792" class="outline-4">
+<h4 id="org7035792"><span class="section-number-4">1.3.4.</span> Function stop<sub>SK</sub><sub>T</sub></h4>
+<div class="outline-text-4" id="text-1-3-4">
+<p>
+Arguments: a vector history, of size at least 2, of elements of type data<sub>SK</sub> and a float tol, which is the tolerance. 
+Output: it returns true if the 1-norm between history[end].T and history[end-1].T is less than tol, otherwise it return false.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5ee4c49" class="outline-4">
+<h4 id="org5ee4c49"><span class="section-number-4">1.3.5.</span> Function stop<sub>SK</sub><sub>ab</sub><sub>old</sub></h4>
+<div class="outline-text-4" id="text-1-3-5">
+<p>
+Arguments: a vector history, of size at least 1, of elements of type data<sub>SK</sub> and a float tol, which is the tolerance. 
+Output: it computes the marginals \(\mu\) and \(\nu\) of history[end].T and it returns true if both the 1-norm of history[end].p-\(\mu\) and 
+history[end-1].q-\(\nu\) are less than tol, otherwise it return false.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org67a75a3" class="outline-4">
+<h4 id="org67a75a3"><span class="section-number-4">1.3.6.</span> Function stop<sub>SK</sub><sub>ab</sub><sub>new</sub></h4>
+<div class="outline-text-4" id="text-1-3-6">
+<p>
+Arguments: a vector history, of size at least 1, of elements of type data<sub>SK</sub> and a float tol, which is the tolerance. 
+Output: it does exactly the same of stop<sub>SK</sub><sub>ab</sub><sub>old</sub> without using directly the T filed of the struct, but recomputing it using a, b and K fields.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org4d01084" class="outline-4">
+<h4 id="org4d01084"><span class="section-number-4">1.3.7.</span> Function stop<sub>SK</sub></h4>
+<div class="outline-text-4" id="text-1-3-7">
+<p>
+Arguments: a vector history, of size at least 1, of elements of type data<sub>SK</sub> and a float tol, which is the tolerance. 
+Output: it returns true if both stop<sub>SK</sub><sub>T</sub> and stop<sub>SK</sub><sub>ab</sub><sub>new</sub> return true on the same arguments, otherwise it returns false (this is the
+most precise stop criterion, since it checks both the difference betwwen the updating of the transport and how much the marginal distributions
+are different from the ones we want).
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org6869cda" class="outline-3">
+<h3 id="org6869cda"><span class="section-number-3">1.4.</span> loss.jl</h3>
+<div class="outline-text-3" id="text-1-4">
+<p>
+In this file we built a simple struct "loss" to make more compact the syntax in the future algorithms concerning the chosen of the loss function.
+</p>
+
+<p>
+The theory tells us that the Gromov-Wasserstein distance between two finite metric measure spaces \((C,\mu)\) and \((D,\nu)\) is given by 
+\[GW((C,\mu),(D,\nu)) = \min_T \sum_{i,j,k,l} L(C_{ik},D_{jl})T_{ij}T_{kl},\]
+where the infimum is taken over all the transport plans T between the marginals \(\mu\) and \(\nu\). In a more compact way, we will write the
+expression above as \(\langle L\otimes T , T\rangle\), where the matrix \(L(C,D)\otimes T\) is defined as 
+\[(L(C,D) \otimes T)_{kl} = L(L(C_{ik},D_{jl})T_{ij}).\]
+</p>
+
+<p>
+So, to define the Gromov-Wasserstein distance, we need a function \(L:\mathbb{R} \to \mathbb{R}\), called loss function. The only admissible
+functions for this work are the L2 loss and the KL loss, defined as 
+\[L2(a,b) = (a-b)^2,\quad KL(a,b) = a\log(a/b) -a +b.\]
+</p>
+
+<p>
+In general, for this algorithm, one can consider loss functions that can be written as \(L(a,b) = f_1(a) + f_2(b) - h_1(a)h_2(b)\) (note that 
+L2 and KL can be written in this way). This form is important for the computation of the tensor product \(L(C,D)\otimes T\), that can be computed 
+using the following formula
+\[L(C,D) \otimes T = f_1(C) *\mu * ones(n)^T + ones(m) *\nu * f_2(D)^T -h_1(C) *T * h_2(D)^T,\]
+where n is the size of \((C,\mu)\), m is the size of \((D,\nu)\), the exponentiation to T is the transpose and the functions f1, f2, h1, h2 
+are applied element-wise.
+</p>
+</div>
+
+<div id="outline-container-org5734442" class="outline-4">
+<h4 id="org5734442"><span class="section-number-4">1.4.1.</span> struct loss</h4>
+<div class="outline-text-4" id="text-1-4-1">
+<p>
+It contains all the informations we talked above regarding a loss function.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-julia"><span style="color: #5EC4FF;">struct</span> <span style="color: #EBBF83;">Loss</span>:
+    string::<span style="color: #EBBF83;">String</span>
+    f1::<span style="color: #EBBF83;">Function</span>
+    f2::<span style="color: #EBBF83;">Function</span>
+    h1::<span style="color: #EBBF83;">Function</span>
+    h2::<span style="color: #EBBF83;">Function</span>  
+<span style="color: #5EC4FF;">end</span>
+</pre>
+</div>
+</div>
+
+<ol class="org-ol">
+<li><a id="org050eb6b"></a>string<br />
+<div class="outline-text-5" id="text-1-4-1-1">
+<p>
+It contains the name of the loss function. The only admissible strings are "L2" and "KL", to distinguish when we use the Euclidean loss or the 
+Kullback-Leibler one.
+</p>
+</div>
+</li>
+
+<li><a id="orgdf65f6a"></a>f1, f2, h1, h2<br />
+<div class="outline-text-5" id="text-1-4-1-2">
+<p>
+They take a float and give another float. They are defined according to the structure above, depending if string=L2 or string=KL.
+</p>
+</div>
+</li>
+
+<li><a id="orgdaed67a"></a>inner constructor<br />
+<div class="outline-text-5" id="text-1-4-1-3">
+<p>
+Argument: a string
+Output: if the string is "L2" or "KL", it defines the function fields according to the decomposition above, otherwise it raises an error.
+</p>
+</div>
+</li>
+</ol>
+</div>
+
+<div id="outline-container-orgfccaf41" class="outline-4">
+<h4 id="orgfccaf41"><span class="section-number-4">1.4.2.</span> Function GW<sub>cost</sub></h4>
+<div class="outline-text-4" id="text-1-4-2">
+<p>
+Arguments: a Loss field, two metric measure spaces \(M=(C,\mu)\) and \(N=(D,\nu)\), a matrix of floats, a float \(\varepsilon\).
+Output: it computes the tensor product \(E = L(C,D)\otimes T\) (it raises an error if the size are not compatible) and then it returns the
+component-wise exponentiation of \(E/\varepsilon\), so that the output is ready to be given in input as field K of a data<sub>SK</sub>, so that it can be
+used for the Sinkhorn algorithm.
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgba29220" class="outline-3">
+<h3 id="orgba29220"><span class="section-number-3">1.5.</span> Barycenters.jl</h3>
+<div class="outline-text-3" id="text-1-5">
+<p>
+In this file, we use all the code developed before to implement the main algorithm "GW<sub>barycenters</sub>" that computes an approximatione of the 
+Gromov Wasserstein barycenter. 
+</p>
+</div>
+
+<div id="outline-container-org508b8da" class="outline-4">
+<h4 id="org508b8da"><span class="section-number-4">1.5.1.</span> Function update<sub>transport</sub></h4>
+<div class="outline-text-4" id="text-1-5-1">
+<p>
+Arguments:  - a matrix Ts of Float (it is the transport plan to be updated)
+</p>
+<ul class="org-ul">
+<li>two MetricMeasureSpace data, between it has to compute the optimal transport plan</li>
+<li>a loss function (using a struct loss)</li>
+<li>a positive float epsilon</li>
+<li>a posotive tolerance to stop the Sinkhorn algorithm.</li>
+</ul>
+<p>
+Output: building a struct RepeatUntilConvergence, it runs the Sinkhorn algorithm between the weights of the metric measure spaces with cost K,
+evaluated using the function GW<sub>cost</sub>, so it returns an approximation of the optimal transport plan between the two spaces.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org935bc3b" class="outline-4">
+<h4 id="org935bc3b"><span class="section-number-4">1.5.2.</span> Function stop<sub>tranport</sub></h4>
+<div class="outline-text-4" id="text-1-5-2">
+<p>
+Arguments: a Vector of Matrix{Float64} and a Float64.
+Output: it checks if the last two elements of the Vector are close enough (considering if the ratio between the difference of the matrices and the
+last matrix is, w.r.t. the infinity norm, less than the error input). 
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd5ae4f7" class="outline-4">
+<h4 id="orgd5ae4f7"><span class="section-number-4">1.5.3.</span> Function compute<sub>C</sub></h4>
+<div class="outline-text-4" id="text-1-5-3">
+<p>
+Arguments:  - a ConvexSum type \(\lambda\)
+</p>
+<ul class="org-ul">
+<li>a Vector of MetricMeasureSpace, that are the ones between, in the end, we want to compute the barycenters</li>
+<li>a Vector of Float64, that will be the weight of a MetricMeasureSpace</li>
+<li>a Vector of Matrix{Float64}, that is a collection of transport plans between p and the collection of MetricMeasurespaces</li>
+<li>a loss function</li>
+</ul>
+<p>
+Output: if the loss function is the Euclidean loss, it calculates 
+    \[C = \frac{1}{p p^T} \sum_{s} \lambda_s T_s^T C_s T_s,\]
+</p>
+
+<p>
+otherwise the loss function is the Kullback-Leibler function and it calculates
+    \[C = exp (\frac{1}{p p^T} \sum_{s} \lambda_s T_s^T log(C_s) T_s).\]
+</p>
+
+<p>
+Then the output is the MetricMeasureSpace given by the couple (C,p).
+</p>
+</div>
+</div>
+
+<div id="outline-container-org62320e4" class="outline-4">
+<h4 id="org62320e4"><span class="section-number-4">1.5.4.</span> Function init<sub>Ts</sub></h4>
+<div class="outline-text-4" id="text-1-5-4">
+<p>
+Arguments: two MetricMeasureSpace data.
+Output: it returns the rank-one matrix obtained by multiplying the weights of the arguments, that is the trivial transport. 
+</p>
+</div>
+</div>
+
+<div id="outline-container-org22c1f36" class="outline-4">
+<h4 id="org22c1f36"><span class="section-number-4">1.5.5.</span> Function update<sub>barycenters</sub></h4>
+<div class="outline-text-4" id="text-1-5-5">
+<p>
+Arguments:  - a MetricMeasureSpace Cp
+</p>
+<ul class="org-ul">
+<li>a Vector of MetricMeasureSpace, that are the ones between, in the end, we want to compute the barycenters</li>
+<li>a ConvexSum type \(\lambda\)</li>
+<li>a loss function</li>
+<li>a Float \(\epsilon\)</li>
+<li>a Float64 Ts<sub>tol</sub>, that is the error that we can obtain updating the transport plans</li>
+<li>a Float64 SK<sub>tol</sub>, that is the error that we admit on the iteration of the Sinkhorn algoritm.</li>
+</ul>
+<p>
+Output:  for any Cs in the Vector of MetricMeasureSpace, it updates the transport between Cp and Cs until the tolerance Ts<sub>tol</sub> is satisfied.
+To do so we use a struct RepeatUntilConvergence, repeating the function update<sub>transport</sub> (keeping fixed all the data but the Ts) with stop 
+criterion given by the function stop<sub>transport</sub>, and with initial data given by init<sub>Ts</sub>(Cp,Cs).
+In the end the function returns the output of the function compute<sub>C</sub> using our data and the Vector
+of transport plans that we obtained (so, in the end, it is updating the matrix of the MetricMeasureSpace Cp)
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgdea3eb3" class="outline-4">
+<h4 id="orgdea3eb3"><span class="section-number-4">1.5.6.</span> Function stop<sub>barycenters</sub><sub>niter</sub></h4>
+<div class="outline-text-4" id="text-1-5-6">
+<p>
+Arguments: a Vector, called history, of MetricMeasureSpace data and an Int64.
+Output: the algorithm returns true if the length of the history is greater than the Int64 data, otherwise it returns false.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org61e823c" class="outline-4">
+<h4 id="org61e823c"><span class="section-number-4">1.5.7.</span> Function init<sub>C</sub></h4>
+<div class="outline-text-4" id="text-1-5-7">
+<p>
+Argument: a Vector p of Float64.
+Output: it initializes the barycenter to be a random square matrix C (with zeros on the diagonal) of size length(p), and then it returns the 
+MetricMeasureSpace given by the couple (C,p).
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgcce97b8" class="outline-4">
+<h4 id="orgcce97b8"><span class="section-number-4">1.5.8.</span> Function GW<sub>barycenters</sub> (the main function)</h4>
+<div class="outline-text-4" id="text-1-5-8">
+<p>
+Arguments:  - a (collection) Vector Cs<sub>collection</sub> of MetricMeasureSpace data
+</p>
+<ul class="org-ul">
+<li>a ConvexSum type \(\lambda\)</li>
+<li>a Int64 n (the size of the barycenter as a MetricMeasureSpace)</li>
+<li>a Vector p of Float64 (the weight of the barycenter)</li>
+<li>a loss function</li>
+<li>a Float \(\epsilon\)</li>
+<li>a Int64 Cp<sub>niter</sub> (the number of iteration of the update<sub>barycenters</sub> function)</li>
+<li>a Float64 Ts<sub>tol</sub>, that is the error that we can obtain updating the transport plans</li>
+<li>a Float64 SK<sub>tol</sub>, that is the error that we admit on the iteration of the Sinkhorn algoritm.</li>
+</ul>
+<p>
+Output: keeping fixed the parameters Cs<sub>collection</sub>, \(\lambda\), loss, \(\epsilon\), Ts<sub>tol</sub>, SK<sub>tol</sub>, it defines the function 
+update<sub>barycenters</sub><sub>repeater</sub>, that takes as input a MetricMeasureSpace and returns aMetricMEasureSpace. So, using a struct RepeatUntilConvergence, 
+starting from the MetricMeasureSpace init<sub>C</sub>(p), repeating the function update<sub>barycenters</sub><sub>repeater</sub>, with stop function stop<sub>barycenters</sub><sub>niter</sub>, 
+the functions returns the last MetricMeasureSpace obtained by the iteration, that is the approximation of the barycenters that we were looking 
+for.
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Davide Badalotti</p>
+<p class="date">Created: 2023-01-30 Mon 18:53</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

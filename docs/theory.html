@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2023-01-30 Mon 18:56 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lrm;</title>
+<meta name="author" content="Davide Badalotti" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+</style>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content" class="content">
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org22498e2">1. Notes on theory</a>
+<ul>
+<li><a href="#org74e0c73">1.1. Gromov-Wasserstein Averaging of Kernel and Distance Matrices</a>
+<ul>
+<li><a href="#orgc712885">1.1.1. Gromov Wasserstein discrepancy</a></li>
+<li><a href="#org9a16b4b">1.1.2. Gromov-Wasserstein barycenters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org22498e2" class="outline-2">
+<h2 id="org22498e2"><span class="section-number-2">1.</span> Notes on theory</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+This document serves to have an idea of the theory behind the project and why certain algorithms have been developed. 
+</p>
+
+<p>
+The project is mainly based on the paper "Gromov-Wasserstein Averaging of Kernel and Distance Matrices", by G. Peyré, M. Cuturi and J. Solomon.
+</p>
+</div>
+
+<div id="outline-container-org74e0c73" class="outline-3">
+<h3 id="org74e0c73"><span class="section-number-3">1.1.</span> Gromov-Wasserstein Averaging of Kernel and Distance Matrices</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+First of all, let us fix some notation: in the problems presented in this paper, we don't really see the structure of a graph, 
+    indeed we will work with:
+        i) a vector &mu; of length n &isin; N, where n could be thougth as the number of nodes and the i-th element of &mu; is the 
+            importance of the i-th node. We will always assume &mu; to be non-negative and sum 1, and it is initialized to be 
+            the uniform distribution if not specified
+        ii) a square matrix C of dimensione n, whose element C<sub>ij</sub> represents how far the i-th node is from the j-th. It is 
+            improperly called <b>distance matrix</b>, because it is not really a distance, in the sense that we don't require it to be 
+            symmetric, non-negative and to satisfy the traingular inequality. Most properly we will call it <b>dissimilarity matrix</b>.
+            Anyway, in many cases it will be induced by what we will call an <b>embedding</b>: to understand this, imagine that the nodes 
+            of the graph are point {x<sub>i</sub>} of R<sup>2</sup> (or R<sup>d</sup> more generally) and that k:R<sup>2</sup> x R<sup>2</sup> &rarr; R is any function, then we define C<sub>ij</sub> = k(x<sub>i,x</sub><sub>j</sub>).
+</p>
+
+<p>
+So, the problems presented in this first part can be defined in the very general setting in which we have a couple (C,&mu;), as above,
+but mostly C will be defined using a function k as shown above.
+</p>
+
+<p>
+We will call such a couple a <b>metric measure space</b>.
+</p>
+</div>
+
+
+<div id="outline-container-orgc712885" class="outline-4">
+<h4 id="orgc712885"><span class="section-number-4">1.1.1.</span> Gromov Wasserstein discrepancy</h4>
+<div class="outline-text-4" id="text-1-1-1">
+<p>
+Given a couple of metric measure spaces \((C,\mu)\) and \((C^*,\mu^*)\), the authors define the discrepancy between them using the definition 
+given by F. Memoli in "Gromov–Wasserstein Distances and the Metric Approach to Object Matching":
+</p>
+
+<p>
+\[\operatorname{GW}(C,\mu;C^*,\mu^*) = \min_{T \in \Gamma(\mu,\mu^*)} \sum_{i,j,k,l} L(C_{ik},C^*_{jl})T_{ij}T_{kl}, \]
+</p>
+
+<p>
+where \(T \in \Gamma(\mu,\mu^*)\) means that \(\sum_{j} T_{ij} = \mu_i\) and \(\sum_i T_{ij} = \mu^*_j\). 
+</p>
+
+<p>
+The idea of such definition is the following: find a multivariate matching T (also called transport plan,i.e. a function that can 
+assigns more than a value to a single point) between the nodes, in such a way that the weigth &mu; and &mu;' are preserved by this 
+matching and \(C_{i,j}\) is not "much" different from \(C_{T(i),T(j)}\). 
+</p>
+
+<p>
+In other words, as all the possible matchings vary, they want to minimize the sum of all \(L(C_i,j ; C_T(i),T(j))\), where L is a fixed
+loss function, usually initialized to be  
+    i) either the common square distance \(L(x,y) = |x-y|^2\)
+    ii) or the so called Kullback-Leibler divergence \(L(x,y) = KL(a|b) = a\log(a/b)-a+b\)
+</p>
+</div>
+
+
+<ol class="org-ol">
+<li><a id="org8444063"></a>Entropic Gromov-Wasserstein discrepancy<br />
+<div class="outline-text-5" id="text-1-1-1-1">
+<p>
+Computationally, the minimization problem above is not so efficient to solve, thus the authors consider a sligth modification of it,
+adding an <b>entropic convex</b>, that must be thought as a regularizing term:
+</p>
+
+\begin{equation}
+\operatorname{GW}_{\varepsilon}(C,\mu;C^*,\mu^*) = \min_{T \in \Gamma(\mu,\mu^*)} \sum_{i,j,k,l} L(C_{ik},C^*_{jl})T_{ij}T_{kl} -
+\varepsilon H(T), 
+\end{equation}
+
+<p>
+where \(H(T)=-\sum_{i,j}T_{ij}(\log(T_{ij}-1))\).
+</p>
+
+
+<p>
+so that the solution of this problem (and then of the original one) can be evaluated using the projected gradient descent algorithm,
+which in a particular choice of some constants (i.e. epsilon and tau, we will be in this hypothesis) it can be substituted by the 
+Sinkhorn algorithm, which in time is very a efficient algorithm. 
+[Here I'm referring to eqaution (8) and Proposition 2.]
+</p>
+</div>
+</li>
+</ol>
+</div>
+
+
+<div id="outline-container-org9a16b4b" class="outline-4">
+<h4 id="org9a16b4b"><span class="section-number-4">1.1.2.</span> Gromov-Wasserstein barycenters</h4>
+<div class="outline-text-4" id="text-1-1-2">
+<p>
+Using the entropic Gromov-Wasserstein discrepancy, given a finite collection of metric measure spaces \((C_s,\mu_s)_{s=1}^S\) and a vector of
+weigths \((\lambda_s)\), the authors define the barycenter problem as
+</p>
+
+\begin{equation}
+\min_{C \in \mathbb{R}^{N \times N}} \sum_{s=1}^S\lambda_s \operatorname{GW}_{\varepsilon}(C,\mu;C_s,\mu_s),
+\end{equation}
+
+<p>
+where we are assuming that the weight \(\mu\) of the barycenter is fixed in advance.
+This is the problem on which we are concentrating, writing in Julia the algorithm they proposed using the theory above.
+[I'm referring to Algorithm 1.]
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Davide Badalotti</p>
+<p class="date">Created: 2023-01-30 Mon 18:56</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

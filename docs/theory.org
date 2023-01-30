@@ -73,35 +73,3 @@ weigths $(\lambda_s)$, the authors define the barycenter problem as
 where we are assuming that the weight $\mu$ of the barycenter is fixed in advance.
 This is the problem on which we are concentrating, writing in Julia the algorithm they proposed using the theory above.
 [I'm referring to Algorithm 1.]
-
-
-
-
-
-
-** Gromov-Wasserstein Learning for Graph Matching and Node Embedding
-
-The paper by Cuturi, Peyré and Solomon had some limitations in the way it's defined the discrepancy of two graphs: given two metric
-measure spaces $(C,\mu)$ and $(C^*,\mu^*)$, we would like to learn if they come from an embedding or not, or, anyway, how far they 
-are from an embedding.
-
-So, let's fix the embedding space: fix a dimension $D\in\mathbb{N}$ and a function $k:\mathbb{R}^D \times \mathbb{R}^D \to \mathbb{R}$.
-Given $(C,\mu)$ as above of dimension n, an honest problem would be to find a collection $(x_k)_{k=1}^n$ of elements of $\mathbb{R}^D$
-s.t. the metric measure space define by this collection (as an embedding, you can find the definition at the beginning of the presentation
-of the other paper) is not "so different" from $(C,\mu)$.
-
-
-The aim of this work, is to find both two embeddings $(x_k)_k$ and $(x_l^*)_l$ which are, respectively, close to $(C,\mu)$ and
-$(C^*,\mu^*)$ s.t. they minimize a suitable modification of Gromov-Wasserstein discrepancy, with some loss function. 
-
-The cost is not exactly the GW-discrepancy because, of course, it should care about the embedding. The authors decided to define the 
-following problem:
-
-#SCRIVERE FORMULA (2)
-
-where $C(X) = (1-\alpha)C + \alpha K(X,X)$ and $K(X,X)$ is exactly the matrix given by the embedding. The parameter $\alpha\in[0,1]$ is
-telling us how much to care about the embedding. We will see that in the algorithm it will vary in such a way that, in an iterative
-process, at any step we will increment the "importance" that we are giving to the embedding: this will be exactly the idea of obtaining 
-at the same time the two embeddings and a matching $T$ that minimizes their discrepancy.
- 
-
