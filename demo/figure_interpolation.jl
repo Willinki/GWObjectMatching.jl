@@ -8,7 +8,6 @@ options below.
 
 import ObjectMatching as OM
 import Distances: euclidean
-import LinearAlgebra: diag
 using PartialFunctions
 using Plots
 using ArgParse
@@ -96,7 +95,7 @@ function plot_results(
     plot(
         img_plots[1], barycenter_plots..., img_plots[end];
         layout=grid(1, TOT_PLOT_NUMBER), axis=([], false),
-        legend=false
+        legend=false, title="Figure interpolation - demo"
     )
     # improve appearance of figures
     gui()

@@ -1,22 +1,43 @@
+"""
+This is a demo script, given a number chosen between 3,4,5,8, it calculates the
+barycenter between all the figures inside the directory data/mnist/<number>
+"""
+
+
 import ObjectMatching as OM
+import Distances: euclidean
+using PartialFunctions
 using ArgParse
+using Plots
 
 function parse_commandline()
     s = ArgParseSettings()
     @add_arg_table! s begin
-	"--mnist_number", "-n"
+	"--mnist_number"
             help="Perform the experiment on images depicting the number n"
             arg_type=Int64
             range_tester=x->x in [3, 4, 5, 8]
             default=3
-        "--barycenter_T_tol"
-            help="Tolerance for the stopping condition on optimal transport"
+        "--npoints"
+            help="Number of points for undersampling"
+            arg_type=Int64
+            default=68
+        "--SK_tol"
+            help="Tolerance for the stopping condition on SK algorithm"
             arg_type=Float64
-            default=1e-6
-        "--barycenter_ab_tol"
-            help="Tolerance for the stopping condition on marginals"
+            default=1e-12
+        "--Ts_tol"
+            help="Tolerance for the stopping condition on Ts"
             arg_type=Float64
-            default=1e-6
+            default=0.001
+        "--Cp_niter"
+            help="Number of iterations for Cp updates"
+            arg_type=Int64
+            default=10
+        "--epsilon"
+            help="Epsilon value for the entropic approximation of the OT problem"
+            arg_type=Float64
+            default=0.03
         "--reconstruct_tol"
             help="Tolerance for points reconstruction algorithm"
             arg_type=Float64
@@ -29,30 +50,54 @@ function parse_commandline()
     return parse_args(s)
 end
 
+"""
+Given an integer numbers, returns an array of paths of each file corresponding to the
+chosen number (only 3,4,5,8 are admissible). Image files can be found in data/mnist
+"""
 function list_img_paths(number::Int64)::Vector{String}
-    dir::String = joinpath(OM.HOME_DIR, "data", string(number))
+    dir::String = joinpath(OM.HOME_DIR, "data", "mnist", string(number))
     return readdir(dir, join=true)
 end
 
 function plot_results(img_list::Vector{Matrix{Float64}}, barycenter::Matrix{Float64})
+    img_plots = [scatter(x[:, 1], x[:, 2], aspect_ratio=:equal) for x in img_list]
+    barycenter_plot = scatter(
+        barycenter[:, 1], barycenter[:, 2],
+        aspect_ratio=:equal, color="red"
+    )
+    plot(
+        img_plots..., barycenter_plot;
+        axis=([], false), legend=false, title="Mnist Barycenter - demo"
+    )
+    # improve appearance of figures
+    gui()
 end
 
 function main()
     args::Dict                           = parse_commandline()
-    files_paths::Vector{String}          = list_img_paths(args[:mnist_number])
-    images_list::Vector{Matrix{Float64}} = map(OM.load_images, files_paths)
-    ## TODO:
-    #barycenter_pars = Dict([
-    #    (:ab_tol, args[:barycenter_ab_tol]),
-    #    (:T_tol, args[:barycenter_T_tol]),
-    #])
-    # C::Matrix{Float64} = compute_barycenter(images_list, barycenter_pars...)#
+    files_paths::Vector{String} = list_img_paths(args["mnist_number"])
+    images_list::Vector{Matrix{Float64}} = map(
+        OM.load_image $ (n=args["npoints"],), 
+        files_paths
+    )
+    images_MMS::Vector{OM.MetricMeasureSpace} = [
+        OM.MetricMeasureSpace(euclidean, image) for image in images_list
+    ]
     reconstruction_pars = Dict([
-        (:max_iter, args[:reconstruct_max_iter]),
-        (:tol,      args[:reconstruct_tol]),
+        (:maxiter,  args["reconstruct_max_iter"]),
+        (:tol,      args["reconstruct_tol"]),
     ])
-    barycenter::Matrix{Float64} = OM.reconstruct_points(C; reconstruction_pars...)
-    plot_results(images_list, barycenter)
+    barycenters_pars = Dict([
+        (:n_points,  args["npoints"]),
+        (:ϵ,         args["epsilon"]),
+        (:Cp_niter,  args["Cp_niter"]),
+        (:Ts_tol,    args["Ts_tol"]),
+        (:SK_tol,    args["SK_tol"]),
+    ])
+    @info "Computing barycenter"
+    barycenter_dist = OM.GW_barycenters(images_MMS; barycenters_pars...)
+    barycenter_img  = OM.reconstruct_points(barycenter_dist.C; reconstruction_pars...)
+    plot_results(images_list, barycenter_img)
 end
 
 main()
