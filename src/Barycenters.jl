@@ -137,7 +137,6 @@ function compute_C(
         p::Vector{Float64},
         loss::OM.Loss
     )::OM.MetricMeasureSpace
-    S = length(λs_collection.v)
     if loss.string == "L2"
         Ms_collection = [
             λs * Ts' * Cs.C * Ts
