@@ -124,7 +124,7 @@ function reconstruct_points(distance_matrix::Matrix{Float64}; kwargs...)
         distances=true, maxoutdim=2, 
         #kwargs...
     )
-    return predict(mds)'
+    return convert(Matrix{Float64}, predict(mds)')
 end
 
 # PLOTTING FUNCTIONS
