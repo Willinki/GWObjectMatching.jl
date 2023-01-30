@@ -35,3 +35,30 @@ A detailed list of options and overall explanation of both scripts is given belo
 
 This scripts implements the procedure illustrated in the image below. Given two figures in the `data/shapes` directory, generates images to interpolate between the two. Below, every optional argument is listed:
 
+* `fromshape_name: [String, def="annulus"]`. Starting image for interpolation. A name between the ones in `data/shapes` must be inserted.  
+* `toshape_name: [String, def="heart2"]`. Last image for interpolation. A name between the ones in `data/shapes` must be inserted.
+* `ninterpolating: [Int, def=3]`. Number of interpolating images between fromshape and toshape.
+* `npoints: [Int, def=500]`. Sometimes images contain a lot of points. It it possible to perform undersampling to speed up calculations. Here we specify the number of points that we want to keep in each image. They are sampled randomly (we will introduce Voronoi's partitions in the future).
+* `SK_tol: [Float, def=1e-12]`. Tolerance for the stopping condition on the Sinkhorn Knopp algorithm. The smallest the tolerance, the larger the compute time. Consult documentation for details.
+* `Ts_tol: [Float, def=0.001]`. Tolerance for the stopping condition on the transport matrix T. Same principle as above holds, the iteration will go on until each element in the matrix is stable up to this value.
+* `Cp_niter: [Int, def=10]`. Number of iterations for the update of the final barycenter C. 
+* `epsilon: [Float, def=0.05]`. Epsilon value for the entropic approximation of the OT problem. Changing this parameter might cause convergence problems, as stated in the paper. If the computation requires too much time, it might be useful to increase the value.
+* `reconstruct_tol: [Float, def=1e-3]`. Tolerance for points reconstruction algorithm. It is used in order to reconstruct points from the distance matrix. See `LinearAlgebra.MetricMDS`.
+*  `reconstruct_max_iter: [Int, def=2000]`. Number of interations for points reconstruction algorithm. It is used in order to reconstruct points from the distance matrix. See `LinearAlgebra.MetricMDS`.
+
+### MNIST Barycenter
+
+Given a number chosen between `[3, 4, 5, 8]` calculates their barycenter. Below, every optional argument is listed:
+
+* `mnist_number: [Int, def=3]`. MNIST number to extract the barycenter from. The only possible choices are `[3, 4, 5, 8]`. See the directory `data/mnist` for more details. 
+* `npoints: [Int, def=68]`. Sometimes images contain a lot of points. It it possible to perform undersampling to speed up calculations. Here we specify the number of points that we want to keep in each image. They are sampled randomly (we will introduce Voronoi's partitions in the future).
+* `SK_tol: [Float, def=1e-12]`. Tolerance for the stopping condition on the Sinkhorn Knopp algorithm. The smallest the tolerance, the larger the compute time. Consult documentation for details.
+* `Ts_tol: [Float, def=0.001]`. Tolerance for the stopping condition on the transport matrix T. Same principle as above holds, the iteration will go on until each element in the matrix is stable up to this value.
+* `Cp_niter: [Int, def=10]`. Number of iterations for the update of the final barycenter C. 
+* `epsilon: [Float, def=0.05]`. Epsilon value for the entropic approximation of the OT problem. Changing this parameter might cause convergence problems, as stated in the paper. If the computation requires too much time, it might be useful to increase the value.
+* `reconstruct_tol: [Float, def=1e-3]`. Tolerance for points reconstruction algorithm. It is used in order to reconstruct points from the distance matrix. See `LinearAlgebra.MetricMDS`.
+*  `reconstruct_max_iter: [Int, def=2000]`. Number of interations for points reconstruction algorithm. It is used in order to reconstruct points from the distance matrix. See `LinearAlgebra.MetricMDS`.
+
+## Notes
+
+This algorithm does not work yet, we are actively working on it. See the `debugging` branch for updates.
