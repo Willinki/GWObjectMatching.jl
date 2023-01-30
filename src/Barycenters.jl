@@ -145,7 +145,7 @@ function compute_C(
         return OM.MetricMeasureSpace(sum(Ms_collection)./(p*p'), p)
     else #if loss.string == "KL"
         Ms_collection = [
-            λs.v * Ts' * log.(Cs.C) * Ts
+            λs * Ts' * log.(Cs.C) * Ts
             for (λs, Ts, Cs) in zip(λs_collection.v, Ts_collection, Cs_collection)
         ]
         return OM.MetricMeasureSpace(exp.(sum(Ms_collection)./(p*p')),p)
