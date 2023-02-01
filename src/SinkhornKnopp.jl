@@ -53,7 +53,8 @@ First proposal for stopping criterion, stops whenever transport is stable
 """
 function stop_SK_T(history::Vector{data_SK}; tol::Float64)::Bool
     length(history) == 1 && return false
-    return norm(history[end].T - history[end-1].T, 1)::Float64 < tol
+    tau = norm(history[end].T - history[end-1].T, 1)
+    return tau < tol
 end
 
 """

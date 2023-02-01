@@ -29,15 +29,15 @@ function parse_commandline()
         "--Ts_tol"
             help="Tolerance for the stopping condition on Ts"
             arg_type=Float64
-            default=0.001
+            default=0.01
         "--Cp_niter"
             help="Number of iterations for Cp updates"
             arg_type=Int64
-            default=10
+            default=5
         "--epsilon"
             help="Epsilon value for the entropic approximation of the OT problem"
             arg_type=Float64
-            default=0.03
+            default=0.001
         "--reconstruct_tol"
             help="Tolerance for points reconstruction algorithm"
             arg_type=Float64
@@ -96,6 +96,7 @@ function main()
     ])
     @info "Computing barycenter"
     barycenter_dist = OM.GW_barycenters(images_MMS; barycenters_pars...)
+    println(barycenter_dist)
     barycenter_img  = OM.reconstruct_points(barycenter_dist.C; reconstruction_pars...)
     plot_results(images_list, barycenter_img)
 end

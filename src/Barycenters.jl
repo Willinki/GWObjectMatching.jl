@@ -1,4 +1,5 @@
 import ObjectMatching as OM
+import Distances: euclidean
 using PartialFunctions
 using LinearAlgebra
 
@@ -42,8 +43,7 @@ end
 function init_C(p::Vector{Float64})::OM.MetricMeasureSpace
     #WLOG we can assume that p.>0, if it is not we discard its zero elements
     p = filter!(e->e!=0, p) 
-    # initialize C uniform
-    return OM.MetricMeasureSpace(rand(Float64, length(p), length(p)), p)
+    return OM.MetricMeasureSpace(euclidean, rand(Float64, length(p), 2); μ=p)
 end
 
 function stop_barycenter_niter(history::Vector{OM.MetricMeasureSpace}; niter::Int64)
@@ -56,6 +56,7 @@ function stop_barycenter_niter(history::Vector{OM.MetricMeasureSpace}; niter::In
     end
     diff_mat = abs.(history[end].C - history[end-1].C)
     ratio = maximum(diff_mat./history[end].C)
+    println("> C ratio: $ratio")
     return L>=niter
 end
 
@@ -70,8 +71,10 @@ function update_barycenters(
         SK_tol::Float64,
     )::OM.MetricMeasureSpace
     #for every Cs we compute the transport to Cp, save it to Ts_collections
+    println("> Computing C")
     Ts_collection = [
         begin 
+            println("--> Computing transport")
             update_transport_repeater = OM.RepeatUntilConvergence{Matrix{Float64}}(
                 update_transport $ (Cs=Cs, Cp=Cp, loss=loss, ϵ=ϵ, SK_tol=SK_tol), 
                 stop_transport $ (ratio_thresh=Ts_tol,); 
@@ -125,6 +128,7 @@ function stop_transport(
     end
     diff_mat = abs.(history[end] - history[end-1])
     ratio = maximum(diff_mat./history[end])
+    println("---> T ratio: $ratio")
     return ratio < ratio_thresh
 end
 
@@ -140,7 +144,8 @@ function compute_C(
             λs * Ts' * Cs.C * Ts
             for (λs, Ts, Cs) in zip(λs_collection.v, Ts_collection, Cs_collection)
         ]
-        return OM.MetricMeasureSpace(sum(Ms_collection)./(p*p'), p)
+        C = OM.MetricMeasureSpace(sum(Ms_collection)./(p*p'), p)
+        return C
     else #if loss.string == "KL"
         Ms_collection = [
             λs * Ts' * log.(Cs.C) * Ts
