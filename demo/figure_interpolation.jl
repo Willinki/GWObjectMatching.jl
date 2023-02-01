@@ -22,23 +22,23 @@ function parse_commandline()
         "--toshape_name"
             help="End image for interpolation"
             arg_type=String
-            default="heart2"
+            default="device"
         "--ninterpolating"
             help="Number of interpolating images"
             arg_type=Int
-            default=3
+            default=5
         "--npoints"
             help="Number of points for undersampling"
             arg_type=Int64
-            default=500
+            default=200
         "--SK_tol"
             help="Tolerance for the stopping condition on SK algorithm"
             arg_type=Float64
-            default=1e-12
+            default=1e-6
         "--Ts_tol"
             help="Tolerance for the stopping condition on Ts"
             arg_type=Float64
-            default=0.001
+            default=0.01
         "--Cp_niter"
             help="Number of iterations for Cp updates"
             arg_type=Int64
@@ -46,7 +46,7 @@ function parse_commandline()
         "--epsilon"
             help="Epsilon value for the entropic approximation of the OT problem"
             arg_type=Float64
-            default=0.005
+            default=0.0025
         "--reconstruct_tol"
             help="Tolerance for points reconstruction algorithm"
             arg_type=Float64
@@ -95,7 +95,7 @@ function plot_results(
     plot(
         img_plots[1], barycenter_plots..., img_plots[end];
         layout=grid(1, TOT_PLOT_NUMBER), axis=([], false),
-        legend=false, title="Figure interpolation - demo"
+        legend=false
     )
     # improve appearance of figures
     gui()
