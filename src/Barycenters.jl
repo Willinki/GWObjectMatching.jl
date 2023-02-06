@@ -48,15 +48,13 @@ end
 
 function stop_barycenter_niter(history::Vector{OM.MetricMeasureSpace}; niter::Int64)
     L = length(history)
-    if L == 1
-        if niter==1
-            return true
-        end
-        return false
-    end
-    diff_mat = abs.(history[end].C - history[end-1].C)
-    ratio = maximum(diff_mat./history[end].C)
-    println("> C ratio: $ratio")
+    # code for debugging purposes
+    #if L == 1 && niter==1
+    #    return true
+    #end
+    #diff_mat = abs.(history[end].C - history[end-1].C)
+    #ratio = maximum(diff_mat./history[end].C)
+    println("Iteration: $L/$niter")
     return L>=niter
 end
 
@@ -71,10 +69,10 @@ function update_barycenters(
         SK_tol::Float64,
     )::OM.MetricMeasureSpace
     #for every Cs we compute the transport to Cp, save it to Ts_collections
-    println("> Computing C")
+    #println("> Computing C")
     Ts_collection = [
         begin 
-            println("--> Computing transport")
+            #println("--> Computing transport")
             update_transport_repeater = OM.RepeatUntilConvergence{Matrix{Float64}}(
                 update_transport $ (Cs=Cs, Cp=Cp, loss=loss, ϵ=ϵ, SK_tol=SK_tol), 
                 stop_transport $ (ratio_thresh=Ts_tol,); 
@@ -128,7 +126,7 @@ function stop_transport(
     end
     diff_mat = abs.(history[end] - history[end-1])
     ratio = maximum(diff_mat./history[end])
-    println("---> T ratio: $ratio")
+    #println("---> T ratio: $ratio")
     return ratio < ratio_thresh
 end
 

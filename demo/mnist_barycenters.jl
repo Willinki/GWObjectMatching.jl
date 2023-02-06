@@ -17,27 +17,27 @@ function parse_commandline()
             help="Perform the experiment on images depicting the number n"
             arg_type=Int64
             range_tester=x->x in [3, 4, 5, 8]
-            default=3
+            default=8
         "--npoints"
             help="Number of points for undersampling"
             arg_type=Int64
-            default=68
+            default=65
         "--SK_tol"
             help="Tolerance for the stopping condition on SK algorithm"
             arg_type=Float64
-            default=1e-12
+            default=1e-8
         "--Ts_tol"
             help="Tolerance for the stopping condition on Ts"
             arg_type=Float64
-            default=0.01
+            default=1e-6
         "--Cp_niter"
             help="Number of iterations for Cp updates"
             arg_type=Int64
-            default=5
+            default=20
         "--epsilon"
             help="Epsilon value for the entropic approximation of the OT problem"
             arg_type=Float64
-            default=0.001
+            default=0.0010
         "--reconstruct_tol"
             help="Tolerance for points reconstruction algorithm"
             arg_type=Float64
@@ -59,22 +59,41 @@ function list_img_paths(number::Int64)::Vector{String}
     return readdir(dir, join=true)
 end
 
-function plot_results(img_list::Vector{Matrix{Float64}}, barycenter::Matrix{Float64})
-    img_plots = [scatter(x[:, 1], x[:, 2], aspect_ratio=:equal) for x in img_list]
+function plot_results(
+        img_list::Vector{Matrix{Float64}},
+        barycenter::Matrix{Float64},
+        outfile=joinpath(OM.HOME_DIR, "demo", "plot_numbers.png")
+    )
+    img_plots = [
+        scatter(
+            x[:, 1], x[:, 2],
+            aspect_ratio=:equal,
+            color="orange",
+            markersize=1.5,
+            markerstrokecolor="orange",
+            markeralpha=2
+        )
+        for x in img_list
+    ]
     barycenter_plot = scatter(
         barycenter[:, 1], barycenter[:, 2],
-        aspect_ratio=:equal, color="red"
+        aspect_ratio=:equal, 
+        color="blue",
+        markersize=1.5,
+        markerstrokecolor="blue",
+        markeralpha=2
     )
     plot(
         img_plots..., barycenter_plot;
-        axis=([], false), legend=false, title="Mnist Barycenter - demo"
+        axis=([], false), legend=false, plot_title="Mnist Barycenter - demo",
+        dpi=300
     )
-    # improve appearance of figures
-    gui()
+    savefig(outfile)
+    println("File saved to $outfile")
 end
 
 function main()
-    args::Dict                           = parse_commandline()
+    args::Dict = parse_commandline()
     files_paths::Vector{String} = list_img_paths(args["mnist_number"])
     images_list::Vector{Matrix{Float64}} = map(
         OM.load_image $ (n=args["npoints"],), 
@@ -96,7 +115,6 @@ function main()
     ])
     @info "Computing barycenter"
     barycenter_dist = OM.GW_barycenters(images_MMS; barycenters_pars...)
-    println(barycenter_dist)
     barycenter_img  = OM.reconstruct_points(barycenter_dist.C; reconstruction_pars...)
     plot_results(images_list, barycenter_img)
 end
