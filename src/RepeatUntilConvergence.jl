@@ -157,7 +157,7 @@ function execute!(R::BaseRepeatUntilConvergence{T}, init_vals::T) where T
 end
 
 """
-Updates the history of a `BaseRepeatUntilConvergence{T}` object with 
+Updatet() the history of a `BaseRepeatUntilConvergence{T}` object with 
 the last iteration results.
 
 ## Returns nothing

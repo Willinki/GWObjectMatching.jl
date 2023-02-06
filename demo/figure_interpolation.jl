@@ -11,6 +11,7 @@ import Distances: euclidean
 using PartialFunctions
 using Plots
 using ArgParse
+using ProgressMeter
 
 function parse_commandline()
     s = ArgParseSettings()
@@ -22,11 +23,11 @@ function parse_commandline()
         "--toshape_name"
             help="End image for interpolation"
             arg_type=String
-            default="device"
+            default="cross"
         "--ninterpolating"
             help="Number of interpolating images"
             arg_type=Int
-            default=5
+            default=3
         "--npoints"
             help="Number of points for undersampling"
             arg_type=Int64
@@ -38,7 +39,7 @@ function parse_commandline()
         "--Ts_tol"
             help="Tolerance for the stopping condition on Ts"
             arg_type=Float64
-            default=0.01
+            default=1e-6
         "--Cp_niter"
             help="Number of iterations for Cp updates"
             arg_type=Int64
@@ -84,21 +85,40 @@ overall results.
 """
 function plot_results(
         img_list::Vector{Matrix{Float64}},
-        barycenters::Vector{Matrix{Float64}}
+        barycenters::Vector{Matrix{Float64}};
+        outfile=joinpath(OM.HOME_DIR, "demo", "plot_figures.png")
     )
-    img_plots = [scatter(x[:, 1], x[:, 2], aspect_ratio=:equal) for x in img_list]
+    img_plots = [
+        scatter(
+            x[:, 1], x[:, 2],
+            aspect_ratio=:equal,
+            color="blue",
+            markersize=1.5,
+            markerstrokecolor="blue",
+            markeralpha=0.9
+        )
+        for x in img_list
+    ]
     barycenter_plots = [
-        scatter(barycenter[:, 1], barycenter[:, 2], aspect_ratio=:equal, color="red")
+        scatter(
+            barycenter[:, 1], barycenter[:, 2],
+            aspect_ratio=:equal,
+            color="orange",
+            markersize=1.5,
+            markerstrokecolor="orange",
+            markeralpha=0.9
+        )
         for barycenter in barycenters
     ]
     TOT_PLOT_NUMBER = length(img_plots)+length(barycenter_plots)
     plot(
         img_plots[1], barycenter_plots..., img_plots[end];
         layout=grid(1, TOT_PLOT_NUMBER), axis=([], false),
-        legend=false
+        legend=false, plot_title="Interpolation between images",
+        dpi=300
     )
-    # improve appearance of figures
-    gui()
+    savefig(outfile)
+    println("File saved to $outfile")
 end
 
 function main()
@@ -125,10 +145,10 @@ function main()
         (:SK_tol,    args["SK_tol"]),
     ])
     @info "Computing interpolation"
-    interpolating_images = [
+    interpolating_images = @showprogress [
         begin
             barycenter_dist = OM.GW_barycenters(
-                images_MMS, OM.ConvexSum([lambda, 1-lambda]);
+                images_MMS, OM.ConvexSum([1-lambda, lambda]);
                 barycenters_pars...
             )
             OM.reconstruct_points(barycenter_dist.C; reconstruction_pars...)
